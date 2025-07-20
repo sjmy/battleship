@@ -1,0 +1,44 @@
+Ship object
+  - length: number
+  - hits: number
+  - sunk: boolean
+  - hit()
+    - increases the hit counter by 1
+  - isSunk()
+    - checks if hits >= length
+
+Gameboard object
+  - two boards per player, self and opponent
+  - create ships
+  - place on board
+  - shipArray?
+    - keeps track of ships
+    - check for correct number of ships and their length?
+    - buildShipArray?
+  - receiveAttack()
+    - takes a pair of coords
+    - determines if there's a hit
+    - sends hit to the correct ship
+    - keeps track of misses
+  - allShipsSunk()?
+
+  - how to represent boards?
+    - nodes? what data would a battleship node hold?
+      - null - empty space, has not been chosen, does not have a ship
+      - miss - white peg, used to be null
+      - hit - part of a ship that has been hit
+      - ship - part of a ship that has not been hit
+    - adjacent nodes?
+
+    - I wonder if nodes/BST are necessary
+    - If I have a shipArray, I have a list of coordinates to loop through and check against the tile chosen
+    - Then if a match is found:
+      - send a hit to that ship
+      - check if it's sunk
+      - send hit message to all boards
+    - If miss:
+      - send miss message to all boards
+
+Player object
+  - human or computer
+  - each player gets a gameboard
