@@ -1,3 +1,18 @@
+I like this idea:
+https://www.geeksforgeeks.org/javascript/implementation-graph-javascript/
+
+- build the full gameboard as a map object
+  - either build every node iteratively so we have access to the entire gameboard or
+  - only build the nodes necessary, ie ships, hits, or misses. everything else is null
+    - this way I could still build the UI with a CSS grid. empty nodes are null anyway
+  - tried this, arrays as keys require iteration to compare so it seems expensive
+    - tried JSON.stringify and .parse which required a change to the formatter to remove spaces from arrays
+    - settled on using "01" or "46" as keys (row, col) but what's the point of that when I can use a 2D array
+- 2D array makes more sense
+  - I will be addressing each position directly anyway so I don't need to use graph traversal for searching
+  - easier to code with
+    - currently this structure makes more sense to me but my desire to get more comfortable with graphs sent me down a frusrating rabbit hole with Map()
+
 Ship object
   - length: number
   - hits: number
@@ -6,9 +21,14 @@ Ship object
     - increases the hit counter by 1
   - isSunk()
     - checks if hits >= length
+  - start coordinates?
+  - horizontal boolean?
+  - possibly a hitsArray that records hit on the ship
 
 Gameboard object
-  - two boards per player, self and opponent
+  - two boards per player
+    - primary: arrange ships, record opponent shots
+    - secondary: record self shots
   - create ships
   - place on board
   - shipArray?
@@ -20,17 +40,45 @@ Gameboard object
     - determines if there's a hit
     - sends hit to the correct ship
     - keeps track of misses
+    - keep track of hits? to lock those positions out from being selected
   - allShipsSunk()?
 
   - how to represent boards?
-    - nodes? what data would a battleship node hold?
-      - null - empty space, has not been chosen, does not have a ship
-      - miss - white peg, used to be null
-      - hit - part of a ship that has been hit
-      - ship - part of a ship that has not been hit
-    - adjacent nodes?
+    - nodes? what data would a board node hold?
+      - position - ex. [4, 6]
+      - data
+        - null - empty space, has not been chosen, does not have a ship
+        - "miss"
+          - primary board - opponent misses
+          - secondary board - player misses
+        - ship object
+          - hit - part of a ship that has been hit
+            - use hitsArray to store hits
+            - primary board - opponent hits
+            - secondary board - player hits
+          - each node contains a reference to the same ship
+            - ex. destroyer = Ship(2)
+            - primaryBoard[5][1] = destroyer
+            - primaryBoard[6][1] = destroyer
+            - now if I make a change to to either node it will update both?
+      - example node object:
+        - { [4, 6]: destroyer }
+    - Map() object?
+      - map.set([4, 6], destroyer)
+      - map.get([4, 6])
+        - destroyer
 
     - I wonder if nodes/BST are necessary
+      - Since it's only a 10x10 board, I could make an array of arrays (like PlantDaddy)
+        - null - empty space
+        - "miss"
+        - ship object
+      - or I stick with BST and traverse the nodes
+        - get the coords
+        - check for the coords in the tree
+        - if not found, create the node, report a miss
+        - if found, change the node data to a hit, report a hit
+
     - If I have a shipArray, I have a list of coordinates to loop through and check against the tile chosen
     - Then if a match is found:
       - send a hit to that ship
