@@ -9,6 +9,10 @@ export default function Ship(shipLength) {
     return shipLength;
   }
 
+  function getHits() {
+    return hits;
+  }
+
   // Increases the number of ‘hits’ on the ship, adds hit to hitsArray
   function hit(position) {
     hits += 1;
@@ -24,5 +28,5 @@ export default function Ship(shipLength) {
     return sunk;
   }
 
-  return { getLength, hit, isSunk };
+  return { getLength, getHits, hit, isSunk };
 }

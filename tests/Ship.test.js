@@ -6,6 +6,7 @@ import Ship from "../src/Ship.js";
 
 describe("ship functionality tests", () => {
   let ship2 = Ship(2);
+  let ship3 = Ship(3);
 
   afterEach(() => {
     ship2 = Ship(2);
@@ -23,8 +24,10 @@ describe("ship functionality tests", () => {
   });
 
   test("ship is not sunk if hits < length", () => {
-    ship2.hit();
+    ship3.hit();
+    ship3.hit();
 
-    expect(ship2.isSunk()).toBe(false);
+    expect(ship3.getHits()).toBe(2);
+    expect(ship3.isSunk()).toBe(false);
   });
 });
