@@ -4,11 +4,12 @@ import Ship from "../src/Ship.js";
 describe("Gameboard functionality tests", () => {
   let human = Gameboard();
   let humanPrimaryBoard = human.getPrimaryBoard();
-  let carrier = Ship(5);
-  let battleship = Ship(4);
-  let destroyer = Ship(3);
-  let submarine = Ship(3);
-  let patrolBoat = Ship(2);
+  let ships = human.getShips();
+  let carrier = ships[0];
+  let battleship = ships[1];
+  let destroyer = ships[2];
+  let submarine = ships[3];
+  let patrolBoat = ships[4];
 
   test("board positions all equal null after creation", () => {
     for (let i = 0; i < 10; i++) {
@@ -16,6 +17,10 @@ describe("Gameboard functionality tests", () => {
         expect(humanPrimaryBoard[i][j]).toBe(null);
       }
     }
+  });
+
+  test("getShips contains five ships", () => {
+    expect(human.getShips().length).toBe(5);
   });
 
   test("primaryBoard: place ship horizontally starting at given coordinates", () => {
@@ -54,7 +59,7 @@ describe("Gameboard functionality tests", () => {
 
     expect(battleship.getHits()).toBe(3);
     expect(submarine.getHits()).toBe(1);
-  })
+  });
 
   test("attack is a miss", () => {
     human.receiveAttack(4, 5);
@@ -62,6 +67,22 @@ describe("Gameboard functionality tests", () => {
     human.receiveAttack(5, 8);
     human.receiveAttack(0, 9);
 
-    expect(human.getMissedAttacks().length).toBe(3)
-  })
+    expect(human.getMissedAttacks().length).toBe(3);
+  });
+
+  test("all ships not sunk", () => {
+    expect(human.allShipsSunk()).toBe(false);
+  });
+
+  test("all ships sunk", () => {
+    for (let i = 0; i < ships.length; i++) {
+      let current = ships[i];
+
+      while (!current.isSunk()) {
+        current.hit();
+      }
+    }
+
+    expect(human.allShipsSunk()).toBe(true);
+  });
 });

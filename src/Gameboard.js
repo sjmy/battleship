@@ -5,9 +5,12 @@ import Ship from "./Ship.js";
 // be able to report whether or not all of their ships have been sunk
 
 export default function Gameboard() {
+  const rows = 10;
+  const cols = 10;
   let primaryBoard = [];
   let secondaryBoard = [];
   let missedAttacks = [];
+  let ships = [];
 
   function getPrimaryBoard() {
     return primaryBoard;
@@ -21,16 +24,34 @@ export default function Gameboard() {
     return missedAttacks;
   }
 
+  function getShips() {
+    return ships;
+  }
+
   function buildBoards() {
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < rows; i++) {
       primaryBoard[i] = [];
       secondaryBoard[i] = [];
 
-      for (let j = 0; j < 10; j++) {
+      for (let j = 0; j < cols; j++) {
         primaryBoard[i][j] = null;
         secondaryBoard[i][j] = null;
       }
     }
+  }
+
+  function buildShips() {
+    let carrier = Ship(5);
+    let battleship = Ship(4);
+    let destroyer = Ship(3);
+    let submarine = Ship(3);
+    let patrolBoat = Ship(2);
+
+    ships.push(carrier);
+    ships.push(battleship);
+    ships.push(destroyer);
+    ships.push(submarine);
+    ships.push(patrolBoat);
   }
 
   // Place a given ship at the given coordinates
@@ -52,10 +73,16 @@ export default function Gameboard() {
 
   // Returns true if all ships on the primary board are sunk, false if not
   function allShipsSunk() {
-
+    for (let i = 0; i < ships.length; i++) {
+      if (!ships[i].isSunk()) {
+        return false;
+      }
+      return true
+    }
   }
 
   buildBoards();
+  buildShips();
 
-  return { getPrimaryBoard, getSecondaryBoard, getMissedAttacks, placeShip, receiveAttack };
+  return { getPrimaryBoard, getSecondaryBoard, getMissedAttacks, getShips, placeShip, receiveAttack, allShipsSunk };
 }
