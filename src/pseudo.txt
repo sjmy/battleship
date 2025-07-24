@@ -23,7 +23,7 @@ Ship object
     - checks if hits >= length
   - start coordinates?
   - horizontal boolean?
-  - possibly a hitsArray that records hit on the ship
+  - possibly a hitsArray that records hit on the ship for CSS selecting
 
 Gameboard object
   - two boards per player

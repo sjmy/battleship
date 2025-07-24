@@ -1,5 +1,4 @@
 import Gameboard from "../src/Gameboard.js";
-import Ship from "../src/Ship.js";
 
 describe("Gameboard functionality tests", () => {
   let human = Gameboard();
@@ -10,6 +9,86 @@ describe("Gameboard functionality tests", () => {
   let destroyer = ships[2];
   let submarine = ships[3];
   let patrolBoat = ships[4];
+
+  function initializeBoard() {
+    human = Gameboard();
+    humanPrimaryBoard = human.getPrimaryBoard();
+  }
+
+  function initializeShips() {
+    ships = human.getShips();
+    carrier = ships[0];
+    battleship = ships[1];
+    destroyer = ships[2];
+    submarine = ships[3];
+    patrolBoat = ships[4];
+  }
+
+  function placeShipsHorizontally() {
+    human.placeShip(carrier, 0, 2);
+    human.placeShip(battleship, 5, 5);
+    human.placeShip(destroyer, 6, 7);
+    human.placeShip(submarine, 1, 5);
+    human.placeShip(patrolBoat, 6, 0);
+  }
+
+  function placeShipsVertically() {
+    ships.forEach((ship) => {
+      ship.changeOrientation();
+    });
+
+    human.placeShip(carrier, 0, 2);
+    human.placeShip(battleship, 5, 5);
+    human.placeShip(destroyer, 6, 7);
+    human.placeShip(submarine, 1, 5);
+    human.placeShip(patrolBoat, 6, 0);
+  }
+
+  // Works with placeShipsHorizontally
+  function fourHits() {
+    human.receiveAttack(5, 5);
+    human.receiveAttack(5, 6);
+    human.receiveAttack(5, 8);
+    human.receiveAttack(1, 6);
+  }
+
+  // Works with placeShipsHorizontally
+  function fourMisses() {
+    human.receiveAttack(4, 5);
+    human.receiveAttack(4, 6);
+    human.receiveAttack(0, 9);
+    human.receiveAttack(3, 3);
+  }
+
+  function sinkHorizontalShips() {
+    // Carrier
+    human.receiveAttack(0, 2);
+    human.receiveAttack(0, 3);
+    human.receiveAttack(0, 4);
+    human.receiveAttack(0, 5);
+    human.receiveAttack(0, 6);
+
+    // Battleship
+    fourHits(); // also includes one Submarine hit
+    human.receiveAttack(5, 7);
+
+    // Destroyer
+    human.receiveAttack(6, 7);
+    human.receiveAttack(6, 8);
+    human.receiveAttack(6, 9);
+
+    // Submarine
+    human.receiveAttack(1, 5);
+    human.receiveAttack(1, 7);
+
+    // Patrol Boat
+    human.receiveAttack(6, 0);
+    human.receiveAttack(6, 1);
+  }
+
+  beforeEach(() => {
+    initializeBoard();
+  });
 
   test("board positions all equal null after creation", () => {
     for (let i = 0; i < 10; i++) {
@@ -24,11 +103,7 @@ describe("Gameboard functionality tests", () => {
   });
 
   test("primaryBoard: place ship horizontally starting at given coordinates", () => {
-    human.placeShip(carrier, 0, 2);
-    human.placeShip(battleship, 5, 5);
-    human.placeShip(destroyer, 8, 7);
-    human.placeShip(submarine, 1, 5);
-    human.placeShip(patrolBoat, 6, 0);
+    placeShipsHorizontally();
 
     for (let i = 0; i < carrier.getLength(); i++) {
       expect(humanPrimaryBoard[0][2 + i].getLength()).toBe(5);
@@ -39,7 +114,7 @@ describe("Gameboard functionality tests", () => {
     }
 
     for (let i = 0; i < destroyer.getLength(); i++) {
-      expect(humanPrimaryBoard[8][7 + i].getLength()).toBe(3);
+      expect(humanPrimaryBoard[6][7 + i].getLength()).toBe(3);
     }
 
     for (let i = 0; i < submarine.getLength(); i++) {
@@ -51,37 +126,61 @@ describe("Gameboard functionality tests", () => {
     }
   });
 
+  test("primaryBoard: place ship vertically starting at given coordinates", () => {
+    placeShipsVertically();
+
+    for (let i = 0; i < carrier.getLength(); i++) {
+      expect(humanPrimaryBoard[0 + i][2].getLength()).toBe(5);
+    }
+
+    for (let i = 0; i < battleship.getLength(); i++) {
+      expect(humanPrimaryBoard[5 + i][5].getLength()).toBe(4);
+    }
+
+    for (let i = 0; i < destroyer.getLength(); i++) {
+      expect(humanPrimaryBoard[6 + i][7].getLength()).toBe(3);
+    }
+
+    for (let i = 0; i < submarine.getLength(); i++) {
+      expect(humanPrimaryBoard[1 + i][5].getLength()).toBe(3);
+    }
+
+    for (let i = 0; i < patrolBoat.getLength(); i++) {
+      expect(humanPrimaryBoard[6 + i][0].getLength()).toBe(2);
+    }
+  });
+
   test("attack is a hit", () => {
-    human.receiveAttack(5, 5);
-    human.receiveAttack(5, 6);
-    human.receiveAttack(5, 8);
-    human.receiveAttack(1, 6);
+    initializeShips();
+    placeShipsHorizontally();
+    fourHits();
 
     expect(battleship.getHits()).toBe(3);
     expect(submarine.getHits()).toBe(1);
   });
 
   test("attack is a miss", () => {
-    human.receiveAttack(4, 5);
-    human.receiveAttack(4, 6);
-    human.receiveAttack(5, 8);
-    human.receiveAttack(0, 9);
+    initializeShips();
+    placeShipsHorizontally();
+    fourHits();
+    fourMisses();
 
-    expect(human.getMissedAttacks().length).toBe(3);
+    expect(human.getMissedAttacks().length).toBe(4);
   });
 
   test("all ships not sunk", () => {
+    initializeShips();
+    placeShipsHorizontally();
+    fourHits();
+    fourMisses();
+
     expect(human.allShipsSunk()).toBe(false);
   });
 
   test("all ships sunk", () => {
-    for (let i = 0; i < ships.length; i++) {
-      let current = ships[i];
-
-      while (!current.isSunk()) {
-        current.hit();
-      }
-    }
+    initializeShips();
+    placeShipsHorizontally();
+    sinkHorizontalShips();
 
     expect(human.allShipsSunk()).toBe(true);
   });

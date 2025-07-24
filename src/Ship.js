@@ -4,6 +4,7 @@ export default function Ship(shipLength) {
   // Keep track of hits
   let hitsArray = [];
   let sunk = false;
+  let horizontal = true;
 
   function getLength() {
     return shipLength;
@@ -11,6 +12,14 @@ export default function Ship(shipLength) {
 
   function getHits() {
     return hits;
+  }
+
+  function getHorizontal() {
+    return horizontal;
+  }
+
+  function changeOrientation() {
+    horizontal = !horizontal;
   }
 
   // Increases the number of ‘hits’ on the ship, adds hit to hitsArray
@@ -28,5 +37,5 @@ export default function Ship(shipLength) {
     return sunk;
   }
 
-  return { getLength, getHits, hit, isSunk };
+  return { getLength, getHits, getHorizontal, changeOrientation, hit, isSunk };
 }

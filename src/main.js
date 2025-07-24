@@ -2,7 +2,26 @@
 import Gameboard from "./Gameboard.js";
 
 let human = Gameboard();
+let humanPrimaryBoard = human.getPrimaryBoard();
+let ships = human.getShips();
+let carrier = ships[0];
+let battleship = ships[1];
+let destroyer = ships[2];
+let submarine = ships[3];
+let patrolBoat = ships[4];
 
-human.placeShip(5, 5)
+ships.forEach((ship) => {
+  ship.changeOrientation();
+});
 
-console.table(human.primaryBoard[5][5])
+human.placeShip(carrier, 0, 2);
+human.placeShip(battleship, 5, 5);
+human.placeShip(destroyer, 6, 7);
+human.placeShip(submarine, 1, 5);
+human.placeShip(patrolBoat, 6, 0);
+
+console.table(human.getPrimaryBoard());
+
+human = Gameboard();
+
+console.table(human.getPrimaryBoard());

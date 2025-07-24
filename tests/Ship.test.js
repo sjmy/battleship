@@ -30,4 +30,14 @@ describe("ship functionality tests", () => {
     expect(ship3.getHits()).toBe(2);
     expect(ship3.isSunk()).toBe(false);
   });
+
+  test("ship is created horizontal", () => {
+    expect(ship2.getHorizontal()).toBe(true);
+  });
+
+  test("change ship orientation", () => {
+    ship2.changeOrientation();
+
+    expect(ship2.getHorizontal()).toBe(false);
+  });
 });

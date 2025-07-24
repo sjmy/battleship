@@ -7,6 +7,7 @@ import Ship from "./Ship.js";
 export default function Gameboard() {
   const rows = 10;
   const cols = 10;
+
   let primaryBoard = [];
   let secondaryBoard = [];
   let missedAttacks = [];
@@ -54,10 +55,16 @@ export default function Gameboard() {
     ships.push(patrolBoat);
   }
 
-  // Place a given ship at the given coordinates
+  // Place a given ship at the given coordinates based on orientation
   function placeShip(ship, x, y) {
-    for (let i = 0; i < ship.getLength(); i++) {
-      primaryBoard[x][y + i] = ship;
+    if (ship.getHorizontal()) {
+      for (let i = 0; i < ship.getLength(); i++) {
+        primaryBoard[x][y + i] = ship;
+      }
+    } else {
+      for (let i = 0; i < ship.getLength(); i++) {
+        primaryBoard[x + i][y] = ship;
+      }
     }
   }
 
@@ -67,7 +74,7 @@ export default function Gameboard() {
     if (primaryBoard[x][y] !== null) {
       primaryBoard[x][y].hit();
     } else {
-      missedAttacks.push([x, y])
+      missedAttacks.push([x, y]);
     }
   }
 
@@ -77,12 +84,20 @@ export default function Gameboard() {
       if (!ships[i].isSunk()) {
         return false;
       }
-      return true
+      return true;
     }
   }
 
   buildBoards();
   buildShips();
 
-  return { getPrimaryBoard, getSecondaryBoard, getMissedAttacks, getShips, placeShip, receiveAttack, allShipsSunk };
+  return {
+    getPrimaryBoard,
+    getSecondaryBoard,
+    getMissedAttacks,
+    getShips,
+    placeShip,
+    receiveAttack,
+    allShipsSunk,
+  };
 }
