@@ -59,15 +59,34 @@ export default function Gameboard() {
 
   // Place a given ship at the given coordinates based on orientation
   function placeShip(ship, x, y) {
+    // Horizontal placement
     if (ship.getHorizontal()) {
+      // If the ship will fit
       if (y + ship.getLength() <= cols) {
+        // Check for other ships, return false if one is found
+        for (let i = 0; i < ship.getLength(); i++) {
+          if (primaryBoard[x][y + i] !== null) {
+            return false;
+          }
+        }
+        // Passed the checks, place the ship
         for (let i = 0; i < ship.getLength(); i++) {
           primaryBoard[x][y + i] = ship;
         }
         return true;
       }
+
+      // Vertical placement
     } else {
+      // If the ship will fit
       if (x + ship.getLength() <= rows) {
+        // Check for other ships, return false if one is found
+        for (let i = 0; i < ship.getLength(); i++) {
+          if (primaryBoard[x + i][y] !== null) {
+            return false;
+          }
+        }
+        // Passed the checks, place the ship
         for (let i = 0; i < ship.getLength(); i++) {
           primaryBoard[x + i][y] = ship;
         }

@@ -88,6 +88,7 @@ describe("Gameboard functionality tests", () => {
 
   beforeEach(() => {
     initializeBoard();
+    initializeShips();
   });
 
   test("buildBoards: board positions all equal null after creation", () => {
@@ -151,7 +152,6 @@ describe("Gameboard functionality tests", () => {
   });
 
   test("receiveAttack: attack is a hit", () => {
-    initializeShips();
     placeShipsHorizontally();
     fourHits();
 
@@ -160,7 +160,6 @@ describe("Gameboard functionality tests", () => {
   });
 
   test("receiveAttack: attack is a miss", () => {
-    initializeShips();
     placeShipsHorizontally();
     fourHits();
     fourMisses();
@@ -169,7 +168,6 @@ describe("Gameboard functionality tests", () => {
   });
 
   test("allShipsSunk: all ships not sunk", () => {
-    initializeShips();
     placeShipsHorizontally();
     fourHits();
     fourMisses();
@@ -178,7 +176,6 @@ describe("Gameboard functionality tests", () => {
   });
 
   test("allShipsSunk: all ships sunk", () => {
-    initializeShips();
     placeShipsHorizontally();
     sinkHorizontalShips();
 
@@ -206,5 +203,17 @@ describe("Gameboard functionality tests", () => {
     patrolBoat.changeOrientation();
     expect(human.placeShip(submarine, 8, 5)).toBe(false);
     expect(human.placeShip(patrolBoat, 9, 0)).toBe(false);
+  });
+
+  test("placeShip: ships placed that collide with other ships return false", () => {
+    // Horizontal
+    human.placeShip(carrier, 0, 5);
+    expect(human.placeShip(battleship, 0, 2)).toBe(false);
+
+    // Vertical
+    submarine.changeOrientation();
+    patrolBoat.changeOrientation();
+    human.placeShip(submarine, 7, 5);
+    expect(human.placeShip(patrolBoat, 8, 5)).toBe(false);
   });
 });

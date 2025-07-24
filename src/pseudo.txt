@@ -29,9 +29,11 @@ Gameboard object
   TODO:
     - keep track of hits? to lock those positions out from being selected (hitsArray)
     - board collisions during manual ship placement
+      - out of bounds and ship collision logic DONE
       - for a drag and drop system, calculate valid positions based on length, existing ships
       - while hovering, squares are green for valid, red for invalid
     - random ship placement
+      - random coordinate generator DONE
 
 Player object
   - human or computer
