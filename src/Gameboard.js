@@ -29,6 +29,7 @@ export default function Gameboard() {
     return ships;
   }
 
+  // Populate pimaryBoard and secondaryBoard with null values
   function buildBoards() {
     for (let i = 0; i < rows; i++) {
       primaryBoard[i] = [];
@@ -41,6 +42,7 @@ export default function Gameboard() {
     }
   }
 
+  // Create ships and push to ships array
   function buildShips() {
     let carrier = Ship(5);
     let battleship = Ship(4);
@@ -58,14 +60,21 @@ export default function Gameboard() {
   // Place a given ship at the given coordinates based on orientation
   function placeShip(ship, x, y) {
     if (ship.getHorizontal()) {
-      for (let i = 0; i < ship.getLength(); i++) {
-        primaryBoard[x][y + i] = ship;
+      if (y + ship.getLength() <= cols) {
+        for (let i = 0; i < ship.getLength(); i++) {
+          primaryBoard[x][y + i] = ship;
+        }
+        return true;
       }
     } else {
-      for (let i = 0; i < ship.getLength(); i++) {
-        primaryBoard[x + i][y] = ship;
+      if (x + ship.getLength() <= rows) {
+        for (let i = 0; i < ship.getLength(); i++) {
+          primaryBoard[x + i][y] = ship;
+        }
+        return true;
       }
     }
+    return false;
   }
 
   // takes a pair of coordinates, determines whether or not the attack hit a ship
@@ -76,6 +85,13 @@ export default function Gameboard() {
     } else {
       missedAttacks.push([x, y]);
     }
+  }
+
+  function generateRandomCoordinates() {
+    const x = Math.floor(Math.random() * 10);
+    const y = Math.floor(Math.random() * 10);
+
+    return [x, y];
   }
 
   // Returns true if all ships on the primary board are sunk, false if not
@@ -99,5 +115,6 @@ export default function Gameboard() {
     placeShip,
     receiveAttack,
     allShipsSunk,
+    generateRandomCoordinates,
   };
 }

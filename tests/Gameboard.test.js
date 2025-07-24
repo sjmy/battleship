@@ -90,7 +90,7 @@ describe("Gameboard functionality tests", () => {
     initializeBoard();
   });
 
-  test("board positions all equal null after creation", () => {
+  test("buildBoards: board positions all equal null after creation", () => {
     for (let i = 0; i < 10; i++) {
       for (let j = 0; j < 10; j++) {
         expect(humanPrimaryBoard[i][j]).toBe(null);
@@ -98,11 +98,11 @@ describe("Gameboard functionality tests", () => {
     }
   });
 
-  test("getShips contains five ships", () => {
+  test("getShips: ships array contains five ships", () => {
     expect(human.getShips().length).toBe(5);
   });
 
-  test("primaryBoard: place ship horizontally starting at given coordinates", () => {
+  test("placeShip: place ship horizontally starting at given coordinates", () => {
     placeShipsHorizontally();
 
     for (let i = 0; i < carrier.getLength(); i++) {
@@ -126,7 +126,7 @@ describe("Gameboard functionality tests", () => {
     }
   });
 
-  test("primaryBoard: place ship vertically starting at given coordinates", () => {
+  test("placeShip: place ship vertically starting at given coordinates", () => {
     placeShipsVertically();
 
     for (let i = 0; i < carrier.getLength(); i++) {
@@ -150,7 +150,7 @@ describe("Gameboard functionality tests", () => {
     }
   });
 
-  test("attack is a hit", () => {
+  test("receiveAttack: attack is a hit", () => {
     initializeShips();
     placeShipsHorizontally();
     fourHits();
@@ -159,7 +159,7 @@ describe("Gameboard functionality tests", () => {
     expect(submarine.getHits()).toBe(1);
   });
 
-  test("attack is a miss", () => {
+  test("receiveAttack: attack is a miss", () => {
     initializeShips();
     placeShipsHorizontally();
     fourHits();
@@ -168,7 +168,7 @@ describe("Gameboard functionality tests", () => {
     expect(human.getMissedAttacks().length).toBe(4);
   });
 
-  test("all ships not sunk", () => {
+  test("allShipsSunk: all ships not sunk", () => {
     initializeShips();
     placeShipsHorizontally();
     fourHits();
@@ -177,11 +177,34 @@ describe("Gameboard functionality tests", () => {
     expect(human.allShipsSunk()).toBe(false);
   });
 
-  test("all ships sunk", () => {
+  test("allShipsSunk: all ships sunk", () => {
     initializeShips();
     placeShipsHorizontally();
     sinkHorizontalShips();
 
     expect(human.allShipsSunk()).toBe(true);
+  });
+
+  test("generateRandomCoordinates: generate random numbers between 0 and 9 inclusive", () => {
+    const [x, y] = human.generateRandomCoordinates();
+
+    expect(x).toBeGreaterThanOrEqual(0);
+    expect(x).toBeLessThanOrEqual(9);
+    expect(y).toBeGreaterThanOrEqual(0);
+    expect(y).toBeLessThanOrEqual(9);
+  });
+
+  // Attempt to place ships out of bounds
+  // Assumes a negative coordinate will never be chosen so only tests right and bottom edges
+  test("placeShip: ships placed out of bounds will return false", () => {
+    // Horizontal
+    expect(human.placeShip(carrier, 0, 6)).toBe(false);
+    expect(human.placeShip(battleship, 5, 9)).toBe(false);
+
+    // Vertical
+    submarine.changeOrientation();
+    patrolBoat.changeOrientation();
+    expect(human.placeShip(submarine, 8, 5)).toBe(false);
+    expect(human.placeShip(patrolBoat, 9, 0)).toBe(false);
   });
 });

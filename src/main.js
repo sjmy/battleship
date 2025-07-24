@@ -10,18 +10,14 @@ let destroyer = ships[2];
 let submarine = ships[3];
 let patrolBoat = ships[4];
 
-ships.forEach((ship) => {
-  ship.changeOrientation();
-});
+// ships.forEach((ship) => {
+//   ship.changeOrientation();
+// });
 
 human.placeShip(carrier, 0, 2);
 human.placeShip(battleship, 5, 5);
 human.placeShip(destroyer, 6, 7);
 human.placeShip(submarine, 1, 5);
 human.placeShip(patrolBoat, 6, 0);
-
-console.table(human.getPrimaryBoard());
-
-human = Gameboard();
 
 console.table(human.getPrimaryBoard());

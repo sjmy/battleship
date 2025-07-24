@@ -12,18 +12,18 @@ describe("ship functionality tests", () => {
     ship2 = Ship(2);
   });
 
-  test("ship length 2", () => {
+  test("getLength: ship length 2", () => {
     expect(ship2.getLength()).toBe(2);
   });
 
-  test("ship is sunk if hits > length", () => {
+  test("hit, isSunk: ship is sunk if hits > length", () => {
     ship2.hit();
     ship2.hit();
 
     expect(ship2.isSunk()).toBe(true);
   });
 
-  test("ship is not sunk if hits < length", () => {
+  test("hit, isSunk: ship is not sunk if hits < length", () => {
     ship3.hit();
     ship3.hit();
 
@@ -31,11 +31,11 @@ describe("ship functionality tests", () => {
     expect(ship3.isSunk()).toBe(false);
   });
 
-  test("ship is created horizontal", () => {
+  test("horizontal: ship is created horizontal", () => {
     expect(ship2.getHorizontal()).toBe(true);
   });
 
-  test("change ship orientation", () => {
+  test("changeOrientation: change ship orientation", () => {
     ship2.changeOrientation();
 
     expect(ship2.getHorizontal()).toBe(false);
