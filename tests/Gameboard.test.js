@@ -1,6 +1,9 @@
 import Gameboard from "../src/Gameboard.js";
 
 describe("Gameboard functionality tests", () => {
+  const rows = 10;
+  const cols = 10;
+
   let human = Gameboard();
   let humanPrimaryBoard = human.getPrimaryBoard();
   let ships = human.getShips();
@@ -182,14 +185,14 @@ describe("Gameboard functionality tests", () => {
     expect(human.allShipsSunk()).toBe(true);
   });
 
-  test("generateRandomCoordinates: generate random numbers between 0 and 9 inclusive", () => {
-    const [x, y] = human.generateRandomCoordinates();
+  // test("getRandomCoordinates: generate random numbers between 0 and 9 inclusive", () => {
+  //   const [x, y] = human.getRandomCoordinates();
 
-    expect(x).toBeGreaterThanOrEqual(0);
-    expect(x).toBeLessThanOrEqual(9);
-    expect(y).toBeGreaterThanOrEqual(0);
-    expect(y).toBeLessThanOrEqual(9);
-  });
+  //   expect(x).toBeGreaterThanOrEqual(0);
+  //   expect(x).toBeLessThanOrEqual(9);
+  //   expect(y).toBeGreaterThanOrEqual(0);
+  //   expect(y).toBeLessThanOrEqual(9);
+  // });
 
   // Attempt to place ships out of bounds
   // Assumes a negative coordinate will never be chosen so only tests right and bottom edges
@@ -234,5 +237,26 @@ describe("Gameboard functionality tests", () => {
     let shipsArray = human.getShips();
     expect(shipsArray.length).toBe(5);
     expect(shipsArray[1].getHits()).toBe(0);
+  });
+
+  test("randomShipPlacement: ships are randomly placed. total number of !null squares is correct.", () => {
+    let count = 0;
+    let shipSquares = 0;
+
+    ships.forEach((ship) => {
+      shipSquares += ship.getLength();
+    });
+
+    human.randomShipPlacement();
+
+    for (let i = 0; i < rows; i++) {
+      for (let j = 0; j < cols; j++) {
+        if (humanPrimaryBoard[i][j] !== null) {
+          count += 1;
+        }
+      }
+    }
+
+    expect(count).toEqual(shipSquares);
   });
 });

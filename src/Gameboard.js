@@ -103,8 +103,33 @@ export default function Gameboard() {
     return false;
   }
 
-  // Place all
-  function randomShipPlacement() {}
+  // Place all ships in random positions
+  function randomShipPlacement() {
+    initializeGameboard();
+
+    ships.forEach((ship) => {
+      let x,
+        y = getRandomCoordinates();
+      ship.setHorizontal(getRandomBoolean());
+
+      // Keeps trying to place ship with random coordinates and orientation until successful
+      while (!placeShip(ship, x, y)) {
+        [x, y] = getRandomCoordinates();
+        ship.changeOrientation();
+      }
+    });
+  }
+
+  function getRandomBoolean() {
+    return Math.random() >= 0.5;
+  }
+
+  function getRandomCoordinates() {
+    const x = Math.floor(Math.random() * 10);
+    const y = Math.floor(Math.random() * 10);
+
+    return [x, y];
+  }
 
   // takes a pair of coordinates, determines whether or not the attack hit a ship
   // then sends the ‘hit’ function to the correct ship, or records the coordinates of the missed shot
@@ -114,13 +139,6 @@ export default function Gameboard() {
     } else {
       missedAttacks.push([x, y]);
     }
-  }
-
-  function generateRandomCoordinates() {
-    const x = Math.floor(Math.random() * 10);
-    const y = Math.floor(Math.random() * 10);
-
-    return [x, y];
   }
 
   // Returns true if all ships on the primary board are sunk, false if not
@@ -143,7 +161,7 @@ export default function Gameboard() {
     placeShip,
     receiveAttack,
     allShipsSunk,
-    generateRandomCoordinates,
     initializeGameboard,
+    randomShipPlacement,
   };
 }

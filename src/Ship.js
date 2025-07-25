@@ -18,6 +18,10 @@ export default function Ship(shipLength) {
     return horizontal;
   }
 
+  function setHorizontal(boolean) {
+    horizontal = boolean;
+  }
+
   function changeOrientation() {
     horizontal = !horizontal;
   }
@@ -37,5 +41,13 @@ export default function Ship(shipLength) {
     return sunk;
   }
 
-  return { getLength, getHits, getHorizontal, changeOrientation, hit, isSunk };
+  return {
+    getLength,
+    getHits,
+    getHorizontal,
+    changeOrientation,
+    setHorizontal,
+    hit,
+    isSunk,
+  };
 }

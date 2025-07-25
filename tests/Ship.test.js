@@ -40,4 +40,12 @@ describe("ship functionality tests", () => {
 
     expect(ship2.getHorizontal()).toBe(false);
   });
+
+  test("setHorizontal: orientation set based on parameter", () => {
+    ship2.setHorizontal(false);
+    expect(ship2.getHorizontal()).toBe(false);
+
+    ship2.setHorizontal(true);
+    expect(ship2.getHorizontal()).toBe(true);
+  });
 });

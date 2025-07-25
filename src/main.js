@@ -14,11 +14,13 @@ let patrolBoat = ships[4];
 //   ship.changeOrientation();
 // });
 
-human.placeShip(carrier, 0, 2);
-human.placeShip(battleship, 5, 5);
-human.placeShip(destroyer, 6, 7);
-submarine.changeOrientation();
-human.placeShip(submarine, 7, 5);
-human.placeShip(patrolBoat, 6, 0);
+// human.placeShip(carrier, 0, 2);
+// human.placeShip(battleship, 5, 5);
+// human.placeShip(destroyer, 6, 7);
+// submarine.changeOrientation();
+// human.placeShip(submarine, 7, 5);
+// human.placeShip(patrolBoat, 6, 0);
 
-console.table(human.getPrimaryBoard());
+human.randomShipPlacement();
+
+console.table(humanPrimaryBoard);
