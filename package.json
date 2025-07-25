@@ -2,7 +2,7 @@
   "name": "battleship",
   "version": "1.0.0",
   "description": "Battleship project for The Odin Project",
-  "main": "main.js",
+  "main": "battleship.js",
   "scripts": {
     "test": "jest --verbose",
     "build": "webpack --config webpack.prod.js",

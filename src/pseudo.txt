@@ -42,6 +42,29 @@ Player object
   - each player gets a gameboard
 
 
+Render Screen module
+  - drawPrimaryBoard
+  - drawSecondaryBoard
+  - CPU delay ("thinking")
+
+Event Listener module
+  - square click events
+  - drag and drop ship placement
+  - turn loop
+    - player chooses square
+      - hit or miss
+        - send info to all four boards
+      - check for any/all ships sunk
+        - where do these checks take place?
+      - render boards
+      - next turn
+  - if all ships sunk
+    - display win screen
+    - reset game option
+
+
+
+
 How to represent boards?
   I like this idea:
   https://www.geeksforgeeks.org/javascript/implementation-graph-javascript/
