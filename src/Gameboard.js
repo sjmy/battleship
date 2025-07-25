@@ -29,6 +29,13 @@ export default function Gameboard() {
     return ships;
   }
 
+  function initializeGameboard() {
+    buildBoards();
+    ships = [];
+    buildShips();
+    missedAttacks = [];
+  }
+
   // Populate pimaryBoard and secondaryBoard with null values
   function buildBoards() {
     for (let i = 0; i < rows; i++) {
@@ -96,6 +103,9 @@ export default function Gameboard() {
     return false;
   }
 
+  // Place all
+  function randomShipPlacement() {}
+
   // takes a pair of coordinates, determines whether or not the attack hit a ship
   // then sends the ‘hit’ function to the correct ship, or records the coordinates of the missed shot
   function receiveAttack(x, y) {
@@ -123,8 +133,7 @@ export default function Gameboard() {
     }
   }
 
-  buildBoards();
-  buildShips();
+  initializeGameboard();
 
   return {
     getPrimaryBoard,
@@ -135,5 +144,6 @@ export default function Gameboard() {
     receiveAttack,
     allShipsSunk,
     generateRandomCoordinates,
+    initializeGameboard,
   };
 }

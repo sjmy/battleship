@@ -10,6 +10,11 @@ describe("Gameboard functionality tests", () => {
   let submarine = ships[3];
   let patrolBoat = ships[4];
 
+  beforeEach(() => {
+    initializeBoard();
+    initializeShips();
+  });
+
   function initializeBoard() {
     human = Gameboard();
     humanPrimaryBoard = human.getPrimaryBoard();
@@ -85,11 +90,6 @@ describe("Gameboard functionality tests", () => {
     human.receiveAttack(6, 0);
     human.receiveAttack(6, 1);
   }
-
-  beforeEach(() => {
-    initializeBoard();
-    initializeShips();
-  });
 
   test("buildBoards: board positions all equal null after creation", () => {
     for (let i = 0; i < 10; i++) {
@@ -215,5 +215,24 @@ describe("Gameboard functionality tests", () => {
     patrolBoat.changeOrientation();
     human.placeShip(submarine, 7, 5);
     expect(human.placeShip(patrolBoat, 8, 5)).toBe(false);
+  });
+
+  test("initializeGameboard: boards, ships array, misses array are all reset", () => {
+    placeShipsHorizontally();
+    fourHits();
+    fourMisses();
+    human.initializeGameboard();
+
+    // Check that all squares are null
+    for (let i = 0; i < 10; i++) {
+      for (let j = 0; j < 10; j++) {
+        expect(humanPrimaryBoard[i][j]).toBe(null);
+      }
+    }
+
+    // Check the ships array length is still 5 and the battleship hits are back to 0
+    let shipsArray = human.getShips();
+    expect(shipsArray.length).toBe(5);
+    expect(shipsArray[1].getHits()).toBe(0);
   });
 });
