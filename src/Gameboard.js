@@ -13,12 +13,20 @@ export default function Gameboard() {
   let missedAttacks = [];
   let ships = [];
 
+  function getRows() {
+    return rows;
+  }
+
+  function getCols() {
+    return cols;
+  }
+
   function getPrimaryBoard() {
     return primaryBoard;
   }
 
   function getSecondaryBoard() {
-    return SecondaryBoard;
+    return secondaryBoard;
   }
 
   function getMissedAttacks() {
@@ -154,6 +162,8 @@ export default function Gameboard() {
   initializeGameboard();
 
   return {
+    getRows,
+    getCols,
     getPrimaryBoard,
     getSecondaryBoard,
     getMissedAttacks,
