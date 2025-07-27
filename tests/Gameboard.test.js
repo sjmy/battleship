@@ -94,6 +94,17 @@ describe("Gameboard functionality tests", () => {
     human.receiveAttack(6, 1);
   }
 
+  // Checks if arrays are the same
+  function comparePositions(current, end) {
+    const currentPos = current;
+    const endPos = end;
+
+    return (
+      currentPos.length === endPos.length &&
+      currentPos.every((num, index) => num === endPos[index])
+    );
+  }
+
   test("buildBoards: board positions all equal null after creation", () => {
     for (let i = 0; i < 10; i++) {
       for (let j = 0; j < 10; j++) {
@@ -168,6 +179,7 @@ describe("Gameboard functionality tests", () => {
     fourMisses();
 
     expect(human.getMissedAttacks().length).toBe(4);
+    expect(comparePositions(human.getMissedAttacks()[0], [4, 5])).toBe(true);
   });
 
   test("allShipsSunk: all ships not sunk", () => {

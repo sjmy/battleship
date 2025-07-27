@@ -14,6 +14,10 @@ export default function Ship(shipLength) {
     return hits;
   }
 
+  function getHitsArray() {
+    return hitsArray;
+  }
+
   function getHorizontal() {
     return horizontal;
   }
@@ -44,6 +48,7 @@ export default function Ship(shipLength) {
   return {
     getLength,
     getHits,
+    getHitsArray,
     getHorizontal,
     changeOrientation,
     setHorizontal,

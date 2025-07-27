@@ -143,7 +143,7 @@ export default function Gameboard() {
   // then sends the ‘hit’ function to the correct ship, or records the coordinates of the missed shot
   function receiveAttack(x, y) {
     if (primaryBoard[x][y] !== null) {
-      primaryBoard[x][y].hit();
+      primaryBoard[x][y].hit([x, y]);
     } else {
       missedAttacks.push([x, y]);
     }
