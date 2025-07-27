@@ -33,26 +33,33 @@ function renderPrimaryBoard(player) {
   const primaryBoard = player.gameboard.getPrimaryBoard();
   const missedAttacks = player.gameboard.getMissedAttacks();
 
-  primaryBoardContainer.textContent = "";
   gameboards.appendChild(primaryBoardContainer);
 
+  // Resets the board
+  primaryBoardContainer.textContent = "";
+
+  // For each square, create a button
   for (let r = 0; r < player.gameboard.getRows(); r++) {
     for (let c = 0; c < player.gameboard.getCols(); c++) {
       const square = document.createElement("button");
 
+      // Add class, row/col data attribute to element
       square.classList.add("square");
       square.dataset.row = `${r}`;
       square.dataset.col = `${c}`;
 
+      // Check if it's a missed attack
       if (checkForMiss(missedAttacks, r, c)) {
         square.classList.add("miss");
         primaryBoardContainer.appendChild(square);
         continue;
       }
 
+      // If the square is not empty and not a miss, it's a ship
       if (primaryBoard[r][c] !== null) {
         const hitsArray = primaryBoard[r][c].getHitsArray();
 
+        // Check it it's a hit
         if (checkForHit(hitsArray, r, c)) {
           square.classList.add("hit");
         }
