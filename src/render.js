@@ -72,4 +72,47 @@ function renderPrimaryBoard(player) {
   }
 }
 
-export { renderPrimaryBoard };
+function renderSecondaryBoard(player, opponent) {
+  const gameboards = document.querySelector(".gameboards");
+  const secondaryBoardContainer = document.querySelector(".secondary-board");
+  const oppPrimaryBoard = opponent.gameboard.getPrimaryBoard();
+  const missedAttacks = opponent.gameboard.getMissedAttacks();
+
+  gameboards.appendChild(secondaryBoardContainer);
+
+  // Resets the board
+  secondaryBoardContainer.textContent = "";
+
+  // For each square, create a button
+  for (let r = 0; r < player.gameboard.getRows(); r++) {
+    for (let c = 0; c < player.gameboard.getCols(); c++) {
+      const square = document.createElement("button");
+
+      // Add class, row/col data attribute to element
+      square.classList.add("square");
+      square.dataset.row = `${r}`;
+      square.dataset.col = `${c}`;
+
+      // Check if it's a missed attack
+      if (checkForMiss(missedAttacks, r, c)) {
+        square.classList.add("miss");
+        secondaryBoardContainer.appendChild(square);
+        continue;
+      }
+
+      // If the square is not empty and not a miss, it's a ship
+      if (oppPrimaryBoard[r][c] !== null) {
+        const hitsArray = oppPrimaryBoard[r][c].getHitsArray();
+
+        // Check it it's a hit
+        if (checkForHit(hitsArray, r, c)) {
+          square.classList.add("hit");
+        }
+      }
+
+      secondaryBoardContainer.appendChild(square);
+    }
+  }
+}
+
+export { renderPrimaryBoard, renderSecondaryBoard };
