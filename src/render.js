@@ -33,7 +33,7 @@ function renderPrimaryBoard(player) {
   const primaryBoard = player.gameboard.getPrimaryBoard();
   const missedAttacks = player.gameboard.getMissedAttacks();
 
-  gameboards.appendChild(primaryBoardContainer);
+  gameboards.prepend(primaryBoardContainer);
 
   // Resets the board
   primaryBoardContainer.textContent = "";
@@ -44,7 +44,7 @@ function renderPrimaryBoard(player) {
       const square = document.createElement("button");
 
       // Add class, row/col data attribute to element
-      square.classList.add("square");
+      square.classList.add("primarySquare");
       square.dataset.row = `${r}`;
       square.dataset.col = `${c}`;
 
@@ -89,7 +89,7 @@ function renderSecondaryBoard(player, opponent) {
       const square = document.createElement("button");
 
       // Add class, row/col data attribute to element
-      square.classList.add("square");
+      square.classList.add("secondarySquare");
       square.dataset.row = `${r}`;
       square.dataset.col = `${c}`;
 

@@ -54,7 +54,8 @@ ul {
   margin: 0 auto;
 }
 
-.square {
+.primarySquare,
+.secondarySquare {
   height: 30px;
   width: 30px;
   border: none;

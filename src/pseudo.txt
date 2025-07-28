@@ -9,7 +9,7 @@ Ship object
   - horizontal boolean
   TODO:
     - start coordinates?
-    - possibly a hitsArray that records hit on the ship for CSS selecting
+    - possibly a hitsArray that records hit on the ship for CSS selecting DONE
       - might not need this if I deal with each receiveAttack properly
       - make the actual DOM element is not clickable after a hit
 
@@ -29,7 +29,7 @@ Gameboard object
     - keeps track of misses
   - allShipsSunk()
   TODO:
-    - keep track of hits? to lock those positions out from being selected (hitsArray)
+    - keep track of hits to lock those positions out from being selected (hitsArray) DONE
     - board collisions during manual ship placement
       - out of bounds and ship collision logic DONE
       - for a drag and drop system, calculate valid positions based on length, existing ships
