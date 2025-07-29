@@ -3,18 +3,56 @@ import "./styles.css";
 // import Ship from "./Ship.js";
 import Player from "./Player.js";
 import { renderPrimaryBoard, renderSecondaryBoard } from "./render.js";
-import { primaryRandomShips } from "./listeners.js";
+import {
+  randomShipsListener,
+  secondaryBoardListener,
+  startGameListener,
+} from "./listeners.js";
 
-let human = Player();
-let opponent = Player();
+async function preGame(human, opponent) {
+  human.gameboard.randomShipPlacement();
+  opponent.gameboard.randomShipPlacement();
 
-human.gameboard.randomShipPlacement();
-opponent.gameboard.randomShipPlacement();
+  renderPrimaryBoard(human);
+  renderSecondaryBoard(human, opponent);
+  randomShipsListener(human);
 
-renderPrimaryBoard(human);
-renderSecondaryBoard(human, opponent);
+  await startGameListener();
 
-primaryRandomShips(human);
+  return true;
+}
+
+async function game() {
+  const randomShipsButton = document.querySelector(".randomShipsButton");
+  const startGameButton = document.querySelector(".startGameButton");
+  let human = Player();
+  let opponent = Player();
+
+  await preGame(human, opponent);
+
+  randomShipsButton.disabled = "true";
+  startGameButton.disabled = "true";
+
+  while (
+    !human.gameboard.allShipsSunk() ||
+    !opponent.gameboard.allShipsSunk()
+  ) {
+    // await secondaryBoardListener(human, opponent);
+    // remove the secondary board listener
+    // render the boards
+    // change the opacity to visualize the current turn?
+    // await opponent turn
+    // add the secondary board listener
+    // render the boards
+    // change the opacity to visualize the current turn?
+  }
+
+  // postGame()
+}
+
+function postGame() {}
+
+game();
 
 // human.gameboard.receiveAttack(0, 0);
 // opponent.gameboard.receiveAttack(0, 5);
