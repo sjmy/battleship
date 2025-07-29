@@ -28,12 +28,9 @@ function checkForMiss(missedAttacks, row, col) {
 }
 
 function renderPrimaryBoard(player) {
-  const gameboards = document.querySelector(".gameboards");
   const primaryBoardContainer = document.querySelector(".primary-board");
   const primaryBoard = player.gameboard.getPrimaryBoard();
   const missedAttacks = player.gameboard.getMissedAttacks();
-
-  gameboards.prepend(primaryBoardContainer);
 
   // Resets the board
   primaryBoardContainer.textContent = "";
@@ -73,12 +70,9 @@ function renderPrimaryBoard(player) {
 }
 
 function renderSecondaryBoard(player, opponent) {
-  const gameboards = document.querySelector(".gameboards");
   const secondaryBoardContainer = document.querySelector(".secondary-board");
   const oppPrimaryBoard = opponent.gameboard.getPrimaryBoard();
   const missedAttacks = opponent.gameboard.getMissedAttacks();
-
-  gameboards.appendChild(secondaryBoardContainer);
 
   // Resets the board
   secondaryBoardContainer.textContent = "";

@@ -9,13 +9,31 @@ function randomShipsListener(player) {
   });
 }
 
-function secondaryBoardListener(player, opponent) {
+function secondaryBoardListener() {
   const secondaryBoard = document.querySelector(".secondary-board");
 
-  secondaryBoard.addEventListener("click", (e) => {
-    return [e.target.dataset.row, e.target.dataset.col];
+  return new Promise((resolve) => {
+    secondaryBoard.addEventListener(
+      "click",
+      (e) => {
+        resolve([Number(e.target.dataset.row), Number(e.target.dataset.col)]);
+      },
+      { once: true },
+    );
   });
 }
+
+// function removeSecondaryBoardListener() {
+//   const secondaryBoard = document.querySelector(".secondary-board");
+
+//   secondaryBoard.removeEventListener("click", resolveAttackPromise);
+// }
+
+// function resolveAttackPromise(e) {
+//   return new Promise((resolve) => {
+//     resolve([e.target.dataset.row, e.target.dataset.col]);
+//   });
+// }
 
 function startGameListener() {
   const startButton = document.querySelector(".startGameButton");

@@ -9,6 +9,7 @@ import {
   startGameListener,
 } from "./listeners.js";
 
+// Handles all functionality before the start game button is clicked
 async function preGame(human, opponent) {
   human.gameboard.randomShipPlacement();
   opponent.gameboard.randomShipPlacement();
@@ -22,9 +23,11 @@ async function preGame(human, opponent) {
   return true;
 }
 
+// Instantiates player and opponent, kicks off preGame
 async function game() {
   const randomShipsButton = document.querySelector(".randomShipsButton");
   const startGameButton = document.querySelector(".startGameButton");
+
   let human = Player();
   let opponent = Player();
 
@@ -33,30 +36,39 @@ async function game() {
   randomShipsButton.disabled = "true";
   startGameButton.disabled = "true";
 
+  // Game loop until a player's ships are sunk
   while (
     !human.gameboard.allShipsSunk() ||
     !opponent.gameboard.allShipsSunk()
   ) {
-    // await secondaryBoardListener(human, opponent);
-    // remove the secondary board listener
-    // render the boards
+    // Await human turn
+    let [x, y] = await secondaryBoardListener();
+
+    // Log attack
+    opponent.gameboard.receiveAttack(x, y);
+
+    // Render the boards
+    renderSecondaryBoard(human, opponent);
+
     // change the opacity to visualize the current turn?
-    // await opponent turn
-    // add the secondary board listener
-    // render the boards
+
+    // Await opponent turn
+    [x, y] = await opponent.gameboard.cpuTurn();
+
+    // Log attack
+    human.gameboard.receiveAttack(x, y);
+
+    // Render the boards
+    renderPrimaryBoard(human);
+
     // change the opacity to visualize the current turn?
   }
 
-  // postGame()
+  postGame();
 }
 
-function postGame() {}
+function postGame() {
+  console.log("game over");
+}
 
 game();
-
-// human.gameboard.receiveAttack(0, 0);
-// opponent.gameboard.receiveAttack(0, 5);
-// human.gameboard.receiveAttack(5, 5);
-// opponent.gameboard.receiveAttack(9, 9);
-// console.table(human.gameboard.getMissedAttacks());
-// console.table(human.gameboard.getPrimaryBoard()[5][5].getHitsArray());

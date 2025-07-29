@@ -139,6 +139,14 @@ export default function Gameboard() {
     return [x, y];
   }
 
+  // Returns random coordinates after delay
+  // TODO: random delay, check for previous misses/hits, if hit try adjacent squares until ship is sunk
+  function cpuTurn() {
+    return new Promise((resolve) => {
+      setTimeout(() => resolve(getRandomCoordinates()), 2000);
+    });
+  }
+
   // takes a pair of coordinates, determines whether or not the attack hit a ship
   // then sends the ‘hit’ function to the correct ship, or records the coordinates of the missed shot
   function receiveAttack(x, y) {
@@ -171,6 +179,7 @@ export default function Gameboard() {
     placeShip,
     receiveAttack,
     allShipsSunk,
+    cpuTurn,
     initializeGameboard,
     randomShipPlacement,
   };
