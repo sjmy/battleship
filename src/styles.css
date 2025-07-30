@@ -34,6 +34,7 @@ ul {
   gap: 150px;
   max-width: fit-content;
   margin: 0 auto;
+  position: relative;
 }
 
 .primary-board {
@@ -110,4 +111,19 @@ ul {
   border-left: 1px solid;
   border-right: 1px solid;
   border-bottom: 1px solid;
+}
+
+.gameOver {
+  display: none;
+  position: absolute;
+  top: 50px;
+  left: 175px;
+  height: 200px;
+  width: 420px;
+  border: 2px solid red;
+  background-color: rgb(131, 2, 2);
+}
+
+.fade {
+  opacity: 50%;
 }

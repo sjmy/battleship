@@ -82,6 +82,12 @@ async function game() {
 }
 
 function postGame(win) {
+  const gameboardsDiv = document.querySelector(".gameboards");
+  const gameOverDiv = document.querySelector(".gameOver");
+
+  gameboardsDiv.classList.add("fade");
+  gameOverDiv.style.display = "block";
+
   if (win) {
     console.log("You win!");
   } else {

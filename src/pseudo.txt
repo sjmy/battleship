@@ -8,8 +8,8 @@ TODO:
       - already does this. secondaryBoard event listeners are only good for one turn and if the game is over, no selections can be made
     - restart button
   - cleanup UI
-    - player/cpu title
-    - turn indicator
+    - player/cpu title?
+    - turn indicator?
       - between boards, "Your turn" or "CPU turn" with arrow
     - hit/miss CSS, animations?
     - report when ship is sunk, ship name DONE
