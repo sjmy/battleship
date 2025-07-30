@@ -30,7 +30,7 @@ function checkForMiss(missedAttacks, row, col) {
 function renderPrimaryBoard(player) {
   const primaryBoardContainer = document.querySelector(".primary-board");
   const primaryBoard = player.gameboard.getPrimaryBoard();
-  const missedAttacks = player.gameboard.getMissedAttacks();
+  const missedAttacks = player.gameboard.getMissedAttacksAgainst();
 
   // Resets the board
   primaryBoardContainer.textContent = "";
@@ -72,7 +72,7 @@ function renderPrimaryBoard(player) {
 function renderSecondaryBoard(player, opponent) {
   const secondaryBoardContainer = document.querySelector(".secondary-board");
   const oppPrimaryBoard = opponent.gameboard.getPrimaryBoard();
-  const missedAttacks = opponent.gameboard.getMissedAttacks();
+  const missedAttacks = opponent.gameboard.getMissedAttacksAgainst();
 
   // Resets the board
   secondaryBoardContainer.textContent = "";
@@ -90,6 +90,7 @@ function renderSecondaryBoard(player, opponent) {
       // Check if it's a missed attack
       if (checkForMiss(missedAttacks, r, c)) {
         square.classList.add("miss");
+        square.disabled = "true";
         secondaryBoardContainer.appendChild(square);
         continue;
       }

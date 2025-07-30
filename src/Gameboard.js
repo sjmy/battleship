@@ -10,7 +10,7 @@ export default function Gameboard() {
 
   let primaryBoard = [];
   let secondaryBoard = [];
-  let missedAttacks = [];
+  let missedAttacksAgainst = [];
   let ships = [];
 
   function getRows() {
@@ -29,8 +29,8 @@ export default function Gameboard() {
     return secondaryBoard;
   }
 
-  function getMissedAttacks() {
-    return missedAttacks;
+  function getMissedAttacksAgainst() {
+    return missedAttacksAgainst;
   }
 
   function getShips() {
@@ -41,7 +41,7 @@ export default function Gameboard() {
     buildBoards();
     ships = [];
     buildShips();
-    missedAttacks = [];
+    missedAttacksAgainst = [];
   }
 
   // Populate pimaryBoard and secondaryBoard with null values
@@ -128,6 +128,49 @@ export default function Gameboard() {
     });
   }
 
+  // Returns random coordinates after delay
+  // TODO: if hit try adjacent squares until ship is sunk
+  function cpuTurn(missedAttacks, humanShips) {
+    let [x, y] = getRandomCoordinates();
+    let totalHits = [];
+
+    for (let i = 0; i < humanShips.length; i++) {
+      const hitsArray = humanShips[i].getHitsArray();
+      for (let j = 0; j < hitsArray.length; j++) {
+        totalHits.push(hitsArray[j]);
+      }
+    }
+
+    while (checkForMiss(missedAttacks, x, y) || checkForHit(totalHits, x, y)) {
+      [x, y] = getRandomCoordinates();
+    }
+
+    return new Promise((resolve) => {
+      setTimeout(() => resolve([x, y]), getRandomDelay());
+    });
+  }
+
+  // takes a pair of coordinates, determines whether or not the attack hit a ship
+  // then sends the ‘hit’ function to the correct ship, or records the coordinates of the missed shot
+  function receiveAttack(x, y) {
+    if (primaryBoard[x][y] !== null) {
+      primaryBoard[x][y].hit([x, y]);
+    } else {
+      missedAttacksAgainst.push([x, y]);
+    }
+  }
+
+  // Returns true if all ships on the primary board are sunk, false if not
+  function allShipsSunk() {
+    for (let i = 0; i < ships.length; i++) {
+      if (!ships[i].isSunk()) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  // Helper functions below
   function getRandomBoolean() {
     return Math.random() >= 0.5;
   }
@@ -139,32 +182,40 @@ export default function Gameboard() {
     return [x, y];
   }
 
-  // Returns random coordinates after delay
-  // TODO: random delay, check for previous misses/hits, if hit try adjacent squares until ship is sunk
-  function cpuTurn() {
-    return new Promise((resolve) => {
-      setTimeout(() => resolve(getRandomCoordinates()), 2000);
-    });
+  // Returns number between 500 and 2000, used for delay in cpuTurn
+  function getRandomDelay() {
+    return Math.ceil(Math.random() * 3000) / 2;
   }
 
-  // takes a pair of coordinates, determines whether or not the attack hit a ship
-  // then sends the ‘hit’ function to the correct ship, or records the coordinates of the missed shot
-  function receiveAttack(x, y) {
-    if (primaryBoard[x][y] !== null) {
-      primaryBoard[x][y].hit([x, y]);
-    } else {
-      missedAttacks.push([x, y]);
-    }
+  // Checks if arrays are the same
+  function comparePositions(current, end) {
+    const currentPos = current;
+    const endPos = end;
+
+    return (
+      currentPos.length === endPos.length &&
+      currentPos.every((num, index) => num === endPos[index])
+    );
   }
 
-  // Returns true if all ships on the primary board are sunk, false if not
-  function allShipsSunk() {
-    for (let i = 0; i < ships.length; i++) {
-      if (!ships[i].isSunk()) {
-        return false;
+  // Checks for matching position in given array using given coordinates
+  function checkForHit(hitsArray, row, col) {
+    for (let i = 0; i < hitsArray.length; i++) {
+      if (comparePositions(hitsArray[i], [row, col])) {
+        return true;
       }
-      return true;
     }
+    return false;
+  }
+
+  // Checks for matching position in given array using given coordinates
+  function checkForMiss(missedAttacksAgainst, row, col) {
+    for (let i = 0; i < missedAttacksAgainst.length; i++) {
+      if (comparePositions(missedAttacksAgainst[i], [row, col])) {
+        return true;
+      }
+    }
+    return false;
   }
 
   initializeGameboard();
@@ -174,7 +225,7 @@ export default function Gameboard() {
     getCols,
     getPrimaryBoard,
     getSecondaryBoard,
-    getMissedAttacks,
+    getMissedAttacksAgainst,
     getShips,
     placeShip,
     receiveAttack,

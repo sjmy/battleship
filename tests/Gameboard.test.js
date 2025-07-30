@@ -192,8 +192,10 @@ describe("Gameboard functionality tests", () => {
 
   test("allShipsSunk: all ships sunk", () => {
     placeShipsHorizontally();
-    sinkHorizontalShips();
+    fourHits();
+    expect(human.allShipsSunk()).toBe(false);
 
+    sinkHorizontalShips();
     expect(human.allShipsSunk()).toBe(true);
   });
 

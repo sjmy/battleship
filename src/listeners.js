@@ -1,4 +1,4 @@
-import { renderPrimaryBoard, renderSecondaryBoard } from "./render.js";
+import { renderPrimaryBoard } from "./render.js";
 
 function randomShipsListener(player) {
   const randomButton = document.querySelector(".randomShipsButton");
@@ -22,18 +22,6 @@ function secondaryBoardListener() {
     );
   });
 }
-
-// function removeSecondaryBoardListener() {
-//   const secondaryBoard = document.querySelector(".secondary-board");
-
-//   secondaryBoard.removeEventListener("click", resolveAttackPromise);
-// }
-
-// function resolveAttackPromise(e) {
-//   return new Promise((resolve) => {
-//     resolve([e.target.dataset.row, e.target.dataset.col]);
-//   });
-// }
 
 function startGameListener() {
   const startButton = document.querySelector(".startGameButton");

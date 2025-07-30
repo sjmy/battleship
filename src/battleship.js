@@ -38,7 +38,7 @@ async function game() {
 
   // Game loop until a player's ships are sunk
   while (
-    !human.gameboard.allShipsSunk() ||
+    !human.gameboard.allShipsSunk() &&
     !opponent.gameboard.allShipsSunk()
   ) {
     // Await human turn
@@ -50,18 +50,23 @@ async function game() {
     // Render the boards
     renderSecondaryBoard(human, opponent);
 
-    // change the opacity to visualize the current turn?
+    // Check for allShipsSunk so the opponent doesn't get an extra turn if it's over
+    if (opponent.gameboard.allShipsSunk()) {
+      break;
+    }
 
     // Await opponent turn
-    [x, y] = await opponent.gameboard.cpuTurn();
+    // cpuTurn requires knowledge of previous hits and misses
+    [x, y] = await opponent.gameboard.cpuTurn(
+      human.gameboard.getMissedAttacksAgainst(),
+      human.gameboard.getShips(),
+    );
 
     // Log attack
     human.gameboard.receiveAttack(x, y);
 
     // Render the boards
     renderPrimaryBoard(human);
-
-    // change the opacity to visualize the current turn?
   }
 
   postGame();
