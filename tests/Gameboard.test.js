@@ -184,6 +184,13 @@ describe("Gameboard functionality tests", () => {
     );
   });
 
+  test("receiveAttack: returns true if a hit, false if a miss", () => {
+    placeShipsHorizontally();
+
+    expect(human.receiveAttack(0, 2)).toBe(true);
+    expect(human.receiveAttack(5, 4)).toBe(false);
+  });
+
   test("allShipsSunk: all ships not sunk", () => {
     placeShipsHorizontally();
     fourHits();

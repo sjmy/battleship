@@ -29,43 +29,50 @@ async function game() {
   const startGameButton = document.querySelector(".startGameButton");
 
   let human = Player();
-  let opponent = Player();
+  let cpu = Player();
   let win = false;
 
-  await preGame(human, opponent);
+  await preGame(human, cpu);
 
   randomShipsButton.disabled = "true";
   startGameButton.disabled = "true";
 
   // Game loop until a player's ships are sunk
-  while (
-    !human.gameboard.allShipsSunk() &&
-    !opponent.gameboard.allShipsSunk()
-  ) {
+  while (!human.gameboard.allShipsSunk() && !cpu.gameboard.allShipsSunk()) {
     // Await human turn
     let [x, y] = await secondaryBoardListener();
 
-    // Log attack
-    opponent.gameboard.receiveAttack(x, y);
+    // Log attack. If it's a hit, check if it's sunk
+    if (cpu.gameboard.receiveAttack(x, y)) {
+      let ship = cpu.gameboard.getPrimaryBoard()[x][y];
+      if (ship.isSunk()) {
+        console.log(`You sunk CPU's ${ship.getShipName()}!`);
+      }
+    }
 
     // Render the boards
-    renderSecondaryBoard(human, opponent);
+    renderSecondaryBoard(human, cpu);
 
-    // Check for allShipsSunk so the opponent doesn't get an extra turn if it's over
-    if (opponent.gameboard.allShipsSunk()) {
+    // Check for allShipsSunk so CPU doesn't get an extra turn if it's over
+    if (cpu.gameboard.allShipsSunk()) {
       win = true;
       break;
     }
 
-    // Await opponent turn
+    // Await CPU turn
     // cpuTurn requires knowledge of previous hits and misses
-    [x, y] = await opponent.gameboard.cpuTurn(
+    [x, y] = await cpu.gameboard.cpuTurn(
       human.gameboard.getMissedAttacksAgainst(),
       human.gameboard.getShips(),
     );
 
-    // Log attack
-    human.gameboard.receiveAttack(x, y);
+    // Log attack. If it's a hit, check if it's sunk
+    if (human.gameboard.receiveAttack(x, y)) {
+      let ship = human.gameboard.getPrimaryBoard()[x][y];
+      if (ship.isSunk()) {
+        console.log(`CPU sunk your ${ship.getShipName()}!`);
+      }
+    }
 
     // Render the boards
     renderPrimaryBoard(human);
@@ -76,9 +83,9 @@ async function game() {
 
 function postGame(win) {
   if (win) {
-    console.log("you win");
+    console.log("You win!");
   } else {
-    console.log("you lose");
+    console.log("CPU wins!");
   }
 }
 

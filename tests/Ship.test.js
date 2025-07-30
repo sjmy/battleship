@@ -57,4 +57,10 @@ describe("ship functionality tests", () => {
     expect(startPosition[0]).toBe(4);
     expect(startPosition[1]).toBe(8);
   });
+
+  test("get/setShipName: sets and returns the string", () => {
+    ship2.setShipName("Helicopter");
+
+    expect(ship2.getShipName()).toBe("Helicopter");
+  });
 });

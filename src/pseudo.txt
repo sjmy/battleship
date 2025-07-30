@@ -4,14 +4,20 @@ TODO:
     - while hovering, squares are green for valid, red for invalid
   - game over screen
     - report winner
-    - lock out further moves
+    - lock out further moves DONE
+      - already does this. secondaryBoard event listeners are only good for one turn and if the game is over, no selections can be made
     - restart button
   - cleanup UI
     - player/cpu title
-    - turn indicator?
+    - turn indicator
+      - between boards, "Your turn" or "CPU turn" with arrow
     - hit/miss CSS, animations?
-    - report when ship is sunk, ship name
-    - need to outline ships for clarity
+    - report when ship is sunk, ship name DONE
+    - need to outline ships for clarity DONE
+  - smarter CPU
+    - if hit but ship not sunk, choose adjacent squares until sunk
+    - record hits that haven't sunk a ship to choose next logical square
+      - ie two hits in a row horizontally that haven't sunk a ship, choose on the horizontal
 
 
 Ship object

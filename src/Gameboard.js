@@ -65,6 +65,12 @@ export default function Gameboard() {
     let submarine = Ship(3);
     let patrolBoat = Ship(2);
 
+    carrier.setShipName("Carrier");
+    battleship.setShipName("Battleship");
+    destroyer.setShipName("Destroyer");
+    submarine.setShipName("Submarine");
+    patrolBoat.setShipName("Patrol Boat");
+
     ships.push(carrier);
     ships.push(battleship);
     ships.push(destroyer);
@@ -152,13 +158,16 @@ export default function Gameboard() {
     });
   }
 
-  // takes a pair of coordinates, determines whether or not the attack hit a ship
-  // then sends the ‘hit’ function to the correct ship, or records the coordinates of the missed shot
+  // Takes a pair of coordinates, determines whether or not the attack hit a ship
+  // Then sends the ‘hit’ function to the correct ship, or records the coordinates of the missed shot
+  // Return true if it's a hit, false if it's a miss
   function receiveAttack(x, y) {
     if (primaryBoard[x][y] !== null) {
       primaryBoard[x][y].hit([x, y]);
+      return true;
     } else {
       missedAttacksAgainst.push([x, y]);
+      return false;
     }
   }
 
