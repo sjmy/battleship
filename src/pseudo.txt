@@ -14,6 +14,8 @@ TODO:
     - hit/miss CSS, animations?
     - report when ship is sunk, ship name DONE
     - need to outline ships for clarity DONE
+    - pictures of ships under each player, show hits/sunk
+    - abcdefgh 12345
   - smarter CPU
     - if hit but ship not sunk, choose adjacent squares until sunk
     - record hits that haven't sunk a ship to choose next logical square
