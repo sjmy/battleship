@@ -27,9 +27,13 @@ ul {
 }
 
 .gameboards {
-  display: flex;
-  justify-content: space-evenly;
-  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  place-self: center;
+  place-items: center;
+  gap: 150px;
+  max-width: fit-content;
+  margin: 0 auto;
 }
 
 .primary-board {
@@ -40,7 +44,7 @@ ul {
   background-color: black;
   border: 1px solid black;
   width: fit-content;
-  margin: 0 auto;
+  margin: 0;
 }
 
 .secondary-board {
@@ -51,7 +55,7 @@ ul {
   background-color: black;
   border: 1px solid black;
   width: fit-content;
-  margin: 0 auto;
+  margin: 0;
 }
 
 .primarySquare,
@@ -72,4 +76,38 @@ ul {
 
 .miss {
   background-color: antiquewhite;
+}
+
+.shipStartH {
+  border-top: 1px solid;
+  border-left: 1px solid;
+  border-bottom: 1px solid;
+}
+
+.shipStartV {
+  border-top: 1px solid;
+  border-left: 1px solid;
+  border-right: 1px solid;
+}
+
+.shipMidH {
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+}
+
+.shipMidV {
+  border-left: 1px solid;
+  border-right: 1px solid;
+}
+
+.shipEndH {
+  border-top: 1px solid;
+  border-right: 1px solid;
+  border-bottom: 1px solid;
+}
+
+.shipEndV {
+  border-left: 1px solid;
+  border-right: 1px solid;
+  border-bottom: 1px solid;
 }

@@ -54,7 +54,26 @@ function renderPrimaryBoard(player) {
 
       // If the square is not empty and not a miss, it's a ship
       if (primaryBoard[r][c] !== null) {
-        const hitsArray = primaryBoard[r][c].getHitsArray();
+        const ship = primaryBoard[r][c];
+        const startPosition = ship.getStartPosition();
+        const shipLength = ship.getLength();
+        const hitsArray = ship.getHitsArray();
+
+        if (ship.getHorizontal()) {
+          if (r === startPosition[0] && c === startPosition[1]) {
+            square.classList.add("shipStartH");
+          } else if (c === startPosition[1] + shipLength - 1) {
+            square.classList.add("shipEndH");
+          } else {
+            square.classList.add("shipMidH");
+          }
+        } else if (r === startPosition[0] && c === startPosition[1]) {
+          square.classList.add("shipStartV");
+        } else if (r === startPosition[0] + shipLength - 1) {
+          square.classList.add("shipEndV");
+        } else {
+          square.classList.add("shipMidV");
+        }
 
         // Check it it's a hit
         if (checkForHit(hitsArray, r, c)) {

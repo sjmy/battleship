@@ -178,8 +178,10 @@ describe("Gameboard functionality tests", () => {
     fourHits();
     fourMisses();
 
-    expect(human.getMissedAttacks().length).toBe(4);
-    expect(comparePositions(human.getMissedAttacks()[0], [4, 5])).toBe(true);
+    expect(human.getMissedAttacksAgainst().length).toBe(4);
+    expect(comparePositions(human.getMissedAttacksAgainst()[0], [4, 5])).toBe(
+      true,
+    );
   });
 
   test("allShipsSunk: all ships not sunk", () => {

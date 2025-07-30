@@ -88,6 +88,7 @@ export default function Gameboard() {
         for (let i = 0; i < ship.getLength(); i++) {
           primaryBoard[x][y + i] = ship;
         }
+        ship.setStartPosition(x, y);
         return true;
       }
 
@@ -105,6 +106,7 @@ export default function Gameboard() {
         for (let i = 0; i < ship.getLength(); i++) {
           primaryBoard[x + i][y] = ship;
         }
+        ship.setStartPosition(x, y);
         return true;
       }
     }

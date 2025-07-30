@@ -5,6 +5,8 @@ export default function Ship(shipLength) {
   let hitsArray = [];
   let sunk = false;
   let horizontal = true;
+  // Set in placeShip() in Gameboard.js. Used with horizontal and length for styling
+  let startPosition;
 
   function getLength() {
     return shipLength;
@@ -30,6 +32,14 @@ export default function Ship(shipLength) {
     horizontal = !horizontal;
   }
 
+  function getStartPosition() {
+    return startPosition;
+  }
+
+  function setStartPosition(x, y) {
+    startPosition = [x, y];
+  }
+
   // Increases the number of ‘hits’ on the ship, adds hit to hitsArray
   function hit(position) {
     hits += 1;
@@ -41,7 +51,6 @@ export default function Ship(shipLength) {
     if (hits >= length) {
       sunk = true;
     }
-
     return sunk;
   }
 
@@ -50,8 +59,10 @@ export default function Ship(shipLength) {
     getHits,
     getHitsArray,
     getHorizontal,
-    changeOrientation,
     setHorizontal,
+    changeOrientation,
+    getStartPosition,
+    setStartPosition,
     hit,
     isSunk,
   };

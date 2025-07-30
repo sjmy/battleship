@@ -11,6 +11,7 @@ TODO:
     - turn indicator?
     - hit/miss CSS, animations?
     - report when ship is sunk, ship name
+    - need to outline ships for clarity
 
 
 Ship object

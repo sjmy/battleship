@@ -30,6 +30,7 @@ async function game() {
 
   let human = Player();
   let opponent = Player();
+  let win = false;
 
   await preGame(human, opponent);
 
@@ -52,6 +53,7 @@ async function game() {
 
     // Check for allShipsSunk so the opponent doesn't get an extra turn if it's over
     if (opponent.gameboard.allShipsSunk()) {
+      win = true;
       break;
     }
 
@@ -69,11 +71,15 @@ async function game() {
     renderPrimaryBoard(human);
   }
 
-  postGame();
+  postGame(win);
 }
 
-function postGame() {
-  console.log("game over");
+function postGame(win) {
+  if (win) {
+    console.log("you win");
+  } else {
+    console.log("you lose");
+  }
 }
 
 game();

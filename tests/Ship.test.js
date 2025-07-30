@@ -48,4 +48,13 @@ describe("ship functionality tests", () => {
     ship2.setHorizontal(true);
     expect(ship2.getHorizontal()).toBe(true);
   });
+
+  test("get/setStartPosition: returns [x, y] when called with x, y parameters", () => {
+    ship2.setStartPosition(4, 8);
+
+    const startPosition = ship2.getStartPosition();
+
+    expect(startPosition[0]).toBe(4);
+    expect(startPosition[1]).toBe(8);
+  });
 });
