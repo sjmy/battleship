@@ -7,6 +7,7 @@ import {
   randomShipsListener,
   secondaryBoardListener,
   startGameListener,
+  playAgainListener,
 } from "./listeners.js";
 
 // Handles all functionality before the start game button is clicked
@@ -27,10 +28,13 @@ async function preGame(human, opponent) {
 async function game() {
   const randomShipsButton = document.querySelector(".randomShipsButton");
   const startGameButton = document.querySelector(".startGameButton");
+  const gameOverDiv = document.querySelector(".gameOver");
 
   let human = Player();
   let cpu = Player();
   let win = false;
+
+  gameOverDiv.display = "none";
 
   await preGame(human, cpu);
 
@@ -81,18 +85,30 @@ async function game() {
   postGame(win);
 }
 
-function postGame(win) {
+async function postGame(win) {
   const gameboardsDiv = document.querySelector(".gameboards");
   const gameOverDiv = document.querySelector(".gameOver");
+  const gameOverText = document.querySelector(".gameOverText");
+  const playAgain = document.querySelector(".playAgain");
 
   gameboardsDiv.classList.add("fade");
-  gameOverDiv.style.display = "block";
+  gameOverDiv.style.display = "flex";
 
   if (win) {
     console.log("You win!");
+    gameOverDiv.classList.add("win");
+    gameOverText.textContent = "You win!";
   } else {
     console.log("CPU wins!");
+    gameOverDiv.classList.add("loss");
+    gameOverText.textContent = "CPU wins!";
   }
+
+  playAgain.display = "block";
+
+  await playAgainListener();
+
+  game();
 }
 
 game();

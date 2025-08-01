@@ -115,15 +115,36 @@ ul {
 
 .gameOver {
   display: none;
+  flex-direction: column;
   position: absolute;
+  align-items: center;
+  justify-content: center;
   top: 50px;
   left: 175px;
   height: 200px;
   width: 420px;
-  border: 2px solid red;
-  background-color: rgb(131, 2, 2);
+}
+
+.gameOverText {
+  color: white;
+  font-size: xx-large;
+  padding-bottom: 10%;
 }
 
 .fade {
   opacity: 50%;
+}
+
+.win {
+  border: 2px solid green;
+  background-color: rgb(1, 105, 1);
+}
+
+.loss {
+  border: 2px solid red;
+  background-color: rgb(131, 2, 2);
+}
+
+.playAgain {
+  display: block;
 }

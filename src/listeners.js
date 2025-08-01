@@ -33,4 +33,19 @@ function startGameListener() {
   });
 }
 
-export { randomShipsListener, secondaryBoardListener, startGameListener };
+function playAgainListener() {
+  const playAgain = document.querySelector(".playAgain");
+
+  return new Promise((resolve) => {
+    playAgain.addEventListener("click", () => {
+      resolve();
+    });
+  });
+}
+
+export {
+  randomShipsListener,
+  secondaryBoardListener,
+  startGameListener,
+  playAgainListener,
+};
