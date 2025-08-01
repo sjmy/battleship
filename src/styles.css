@@ -26,6 +26,11 @@ ul {
   text-align: center;
 }
 
+.info {
+  display: flex;
+  justify-content: center;
+}
+
 .gameboards {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

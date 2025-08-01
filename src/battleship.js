@@ -6,6 +6,12 @@ import {
   reset,
   disableButtons,
   gameOver,
+  msgPlaceShips,
+  msgCPUShipSunk,
+  msgHumanShipSunk,
+  msgClear,
+  msgCPUTurn,
+  msgHumanTurn,
 } from "./render.js";
 import {
   randomShipsListener,
@@ -22,6 +28,7 @@ async function preGame(human, opponent) {
   renderPrimaryBoard(human);
   renderSecondaryBoard(human, opponent);
   randomShipsListener(human);
+  msgPlaceShips();
 
   await startGameListener();
 
@@ -35,21 +42,21 @@ async function game() {
   let win = false;
 
   reset();
-
   await preGame(human, cpu);
-
+  msgClear();
   disableButtons();
 
   // Game loop until a player's ships are sunk
   while (!human.gameboard.allShipsSunk() && !cpu.gameboard.allShipsSunk()) {
     // Await human turn
+    // msgHumanTurn();
     let [x, y] = await secondaryBoardListener();
 
     // Log attack. If it's a hit, check if it's sunk
     if (cpu.gameboard.receiveAttack(x, y)) {
       let ship = cpu.gameboard.getPrimaryBoard()[x][y];
       if (ship.isSunk()) {
-        console.log(`You sunk CPU's ${ship.getShipName()}!`);
+        msgCPUShipSunk(ship);
       }
     }
 
@@ -64,6 +71,7 @@ async function game() {
 
     // Await CPU turn
     // cpuTurn requires knowledge of previous hits and misses
+    // msgCPUTurn();
     [x, y] = await cpu.gameboard.cpuTurn(
       human.gameboard.getMissedAttacksAgainst(),
       human.gameboard.getShips(),
@@ -73,7 +81,7 @@ async function game() {
     if (human.gameboard.receiveAttack(x, y)) {
       let ship = human.gameboard.getPrimaryBoard()[x][y];
       if (ship.isSunk()) {
-        console.log(`CPU sunk your ${ship.getShipName()}!`);
+        msgHumanShipSunk(ship);
       }
     }
 
@@ -86,9 +94,7 @@ async function game() {
 
 async function postGame(win) {
   gameOver(win);
-
   await playAgainListener();
-
   game();
 }
 

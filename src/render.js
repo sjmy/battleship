@@ -171,10 +171,46 @@ function disableButtons() {
   startGameButton.disabled = "true";
 }
 
+function msgClear() {
+  const infoDiv = document.querySelector(".info");
+  infoDiv.textContent = "Attack!";
+}
+
+function msgPlaceShips() {
+  const infoDiv = document.querySelector(".info");
+  infoDiv.textContent = "Place your ships.";
+}
+
+function msgCPUShipSunk(ship) {
+  const infoDiv = document.querySelector(".info");
+  infoDiv.textContent = `You sunk CPU's ${ship.getShipName()}!`;
+}
+
+function msgHumanShipSunk(ship) {
+  const infoDiv = document.querySelector(".info");
+  infoDiv.textContent = `CPU sunk your ${ship.getShipName()}!`;
+}
+
+function msgCPUTurn() {
+  const infoDiv = document.querySelector(".info");
+  infoDiv.textContent = "CPU turn.";
+}
+
+function msgHumanTurn() {
+  const infoDiv = document.querySelector(".info");
+  infoDiv.textContent = "Your turn.";
+}
+
 export {
   renderPrimaryBoard,
   renderSecondaryBoard,
   reset,
   disableButtons,
   gameOver,
+  msgClear,
+  msgPlaceShips,
+  msgCPUShipSunk,
+  msgHumanShipSunk,
+  msgCPUTurn,
+  msgHumanTurn,
 };

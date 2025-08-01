@@ -10,11 +10,12 @@ TODO:
       - need to separate out reset tasks, call at beginning of game() DONE
   - cleanup UI
     - player/cpu title?
-    - turn indicator?
-      - between boards, "Your turn" or "CPU turn" with arrow
     - hit/miss CSS, animations?
     - report when ship is sunk, ship name DONE
-      - currently console.log, build this into the UI
+      - currently console.log, build this into the UI DONE
+    - sort out the game messages
+      - who's turn?
+      - spacing is currently not correct
     - need to outline ships for clarity DONE
     - pictures of ships under each player, show hits/sunk
     - abcdefgh 12345
