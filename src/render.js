@@ -129,4 +129,52 @@ function renderSecondaryBoard(player, opponent) {
   }
 }
 
-export { renderPrimaryBoard, renderSecondaryBoard };
+function gameOver(win) {
+  const gameboardsDiv = document.querySelector(".gameboards");
+  const gameOverDiv = document.querySelector(".gameOver");
+  const gameOverText = document.querySelector(".gameOverText");
+  const playAgain = document.querySelector(".playAgain");
+
+  gameboardsDiv.classList.add("fade");
+  gameOverDiv.style.display = "flex";
+
+  if (win) {
+    console.log("You win!");
+    gameOverDiv.classList.add("win");
+    gameOverText.textContent = "You win!";
+  } else {
+    console.log("CPU wins!");
+    gameOverDiv.classList.add("loss");
+    gameOverText.textContent = "CPU wins!";
+  }
+
+  playAgain.display = "block";
+}
+
+function reset() {
+  const gameboardsDiv = document.querySelector(".gameboards");
+  const randomShipsButton = document.querySelector(".randomShipsButton");
+  const startGameButton = document.querySelector(".startGameButton");
+  const gameOverDiv = document.querySelector(".gameOver");
+
+  gameboardsDiv.classList.remove("fade");
+  randomShipsButton.removeAttribute("disabled");
+  startGameButton.removeAttribute("disabled");
+  gameOverDiv.style.display = "none";
+}
+
+function disableButtons() {
+  const randomShipsButton = document.querySelector(".randomShipsButton");
+  const startGameButton = document.querySelector(".startGameButton");
+
+  randomShipsButton.disabled = "true";
+  startGameButton.disabled = "true";
+}
+
+export {
+  renderPrimaryBoard,
+  renderSecondaryBoard,
+  reset,
+  disableButtons,
+  gameOver,
+};

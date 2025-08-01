@@ -1,8 +1,12 @@
 import "./styles.css";
-// import Gameboard from "./Gameboard.js";
-// import Ship from "./Ship.js";
 import Player from "./Player.js";
-import { renderPrimaryBoard, renderSecondaryBoard } from "./render.js";
+import {
+  renderPrimaryBoard,
+  renderSecondaryBoard,
+  reset,
+  disableButtons,
+  gameOver,
+} from "./render.js";
 import {
   randomShipsListener,
   secondaryBoardListener,
@@ -26,20 +30,15 @@ async function preGame(human, opponent) {
 
 // Instantiates player and opponent, kicks off preGame
 async function game() {
-  const randomShipsButton = document.querySelector(".randomShipsButton");
-  const startGameButton = document.querySelector(".startGameButton");
-  const gameOverDiv = document.querySelector(".gameOver");
-
   let human = Player();
   let cpu = Player();
   let win = false;
 
-  gameOverDiv.display = "none";
+  reset();
 
   await preGame(human, cpu);
 
-  randomShipsButton.disabled = "true";
-  startGameButton.disabled = "true";
+  disableButtons();
 
   // Game loop until a player's ships are sunk
   while (!human.gameboard.allShipsSunk() && !cpu.gameboard.allShipsSunk()) {
@@ -86,25 +85,7 @@ async function game() {
 }
 
 async function postGame(win) {
-  const gameboardsDiv = document.querySelector(".gameboards");
-  const gameOverDiv = document.querySelector(".gameOver");
-  const gameOverText = document.querySelector(".gameOverText");
-  const playAgain = document.querySelector(".playAgain");
-
-  gameboardsDiv.classList.add("fade");
-  gameOverDiv.style.display = "flex";
-
-  if (win) {
-    console.log("You win!");
-    gameOverDiv.classList.add("win");
-    gameOverText.textContent = "You win!";
-  } else {
-    console.log("CPU wins!");
-    gameOverDiv.classList.add("loss");
-    gameOverText.textContent = "CPU wins!";
-  }
-
-  playAgain.display = "block";
+  gameOver(win);
 
   await playAgainListener();
 

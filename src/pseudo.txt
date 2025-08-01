@@ -2,19 +2,19 @@ TODO:
   - manual ship placement
     - for a drag and drop system, calculate valid positions based on length, existing ships
     - while hovering, squares are green for valid, red for invalid
-  - game over screen
-    - report winner
+  - game over screen DONE
+    - report winner DONE
     - lock out further moves DONE
       - already does this. secondaryBoard event listeners are only good for one turn and if the game is over, no selections can be made
-    - restart button
-      - need to separate out reset tasks, call at beginning of game()
-        - initializeBoard, reset randomizeShips button and Start game button, hide gameOverDiv?
+    - restart button DONE
+      - need to separate out reset tasks, call at beginning of game() DONE
   - cleanup UI
     - player/cpu title?
     - turn indicator?
       - between boards, "Your turn" or "CPU turn" with arrow
     - hit/miss CSS, animations?
     - report when ship is sunk, ship name DONE
+      - currently console.log, build this into the UI
     - need to outline ships for clarity DONE
     - pictures of ships under each player, show hits/sunk
     - abcdefgh 12345
