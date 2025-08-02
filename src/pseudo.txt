@@ -9,7 +9,7 @@ TODO:
     - restart button DONE
       - need to separate out reset tasks, call at beginning of game() DONE
   - cleanup UI
-    - player/cpu title?
+    - player/cpu title DONE
     - hit/miss CSS, animations?
     - report when ship is sunk, ship name DONE
       - currently console.log, build this into the UI DONE

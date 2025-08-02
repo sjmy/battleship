@@ -29,6 +29,15 @@ ul {
 .info {
   display: flex;
   justify-content: center;
+  height: 30px;
+}
+
+.board-labels {
+  display: grid;
+  grid-template-columns: repeat(2, 309px);
+  place-items: center;
+  justify-content: center;
+  gap: 150px;
 }
 
 .gameboards {

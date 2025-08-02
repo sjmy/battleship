@@ -130,12 +130,14 @@ function renderSecondaryBoard(player, opponent) {
 }
 
 function gameOver(win) {
-  const gameboardsDiv = document.querySelector(".gameboards");
+  const primaryBoard = document.querySelector(".primary-board");
+  const secondaryBoard = document.querySelector(".secondary-board");
   const gameOverDiv = document.querySelector(".gameOver");
   const gameOverText = document.querySelector(".gameOverText");
   const playAgain = document.querySelector(".playAgain");
 
-  gameboardsDiv.classList.add("fade");
+  primaryBoard.classList.remove("fade");
+  secondaryBoard.classList.remove("fade");
   gameOverDiv.style.display = "flex";
 
   if (win) {
@@ -152,14 +154,16 @@ function gameOver(win) {
 }
 
 function reset() {
-  const gameboardsDiv = document.querySelector(".gameboards");
+  const primaryBoard = document.querySelector(".primary-board");
+  const secondaryBoard = document.querySelector(".secondary-board");
   const randomShipsButton = document.querySelector(".randomShipsButton");
   const startGameButton = document.querySelector(".startGameButton");
   const gameOverDiv = document.querySelector(".gameOver");
 
-  gameboardsDiv.classList.remove("fade");
-  randomShipsButton.removeAttribute("disabled");
-  startGameButton.removeAttribute("disabled");
+  primaryBoard.classList.remove("fade");
+  secondaryBoard.classList.remove("fade");
+  randomShipsButton.style.display = "inline-block";
+  startGameButton.style.display = "inline-block";
   gameOverDiv.style.display = "none";
 }
 
@@ -167,13 +171,13 @@ function disableButtons() {
   const randomShipsButton = document.querySelector(".randomShipsButton");
   const startGameButton = document.querySelector(".startGameButton");
 
-  randomShipsButton.disabled = "true";
-  startGameButton.disabled = "true";
+  randomShipsButton.style.display = "none";
+  startGameButton.style.display = "none";
 }
 
 function msgClear() {
   const infoDiv = document.querySelector(".info");
-  infoDiv.textContent = "Attack!";
+  infoDiv.textContent = "";
 }
 
 function msgPlaceShips() {
