@@ -185,14 +185,23 @@ function msgPlaceShips() {
   infoDiv.textContent = "Place your ships.";
 }
 
+function removeSunkShipClass() {
+  const infoDiv = document.querySelector(".info");
+  infoDiv.classList.remove("sunk-ship");
+}
+
 function msgCPUShipSunk(ship) {
   const infoDiv = document.querySelector(".info");
+  infoDiv.classList.add("sunk-ship");
   infoDiv.textContent = `You sunk CPU's ${ship.getShipName()}!`;
+  setTimeout(removeSunkShipClass, 5000);
 }
 
 function msgHumanShipSunk(ship) {
   const infoDiv = document.querySelector(".info");
+  infoDiv.classList.add("sunk-ship");
   infoDiv.textContent = `CPU sunk your ${ship.getShipName()}!`;
+  setTimeout(removeSunkShipClass, 5000);
 }
 
 function msgCPUTurn() {

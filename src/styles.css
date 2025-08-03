@@ -1,3 +1,12 @@
+@keyframes sunk {
+  from {
+    background-color: red;
+  }
+  to {
+    background-color: none;
+  }
+}
+
 :root {
   line-height: 1.5;
 }
@@ -143,6 +152,11 @@ ul {
   color: white;
   font-size: xx-large;
   padding-bottom: 10%;
+}
+
+.sunk-ship {
+  animation-name: sunk;
+  animation-duration: 1s;
 }
 
 .fade {
