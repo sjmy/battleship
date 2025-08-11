@@ -1,9 +1,9 @@
 @keyframes sunk {
   from {
-    background-color: red;
+    color: red;
   }
   to {
-    background-color: none;
+    color: none;
   }
 }
 

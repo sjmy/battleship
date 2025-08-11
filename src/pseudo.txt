@@ -13,9 +13,8 @@ TODO:
     - hit/miss CSS, animations?
     - report when ship is sunk, ship name DONE
       - currently console.log, build this into the UI DONE
-    - sort out the game messages
-      - who's turn?
-      - spacing is currently not correct
+    - sort out the game messages DONE
+      - spacing is currently not correct DONE
     - need to outline ships for clarity DONE
     - pictures of ships under each player, show hits/sunk
     - abcdefgh 12345

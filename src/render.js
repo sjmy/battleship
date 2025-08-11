@@ -31,13 +31,27 @@ function renderPrimaryBoard(player) {
   const primaryBoardContainer = document.querySelector(".primary-board");
   const primaryBoard = player.gameboard.getPrimaryBoard();
   const missedAttacks = player.gameboard.getMissedAttacksAgainst();
+  const letterLabels = "ABCDEFGHIJ";
+  const numberLabels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   // Resets the board
   primaryBoardContainer.textContent = "";
 
   // For each square, create a button
-  for (let r = 0; r < player.gameboard.getRows(); r++) {
-    for (let c = 0; c < player.gameboard.getCols(); c++) {
+  for (let r = 0; r < player.gameboard.getRows() + 1; r++) {
+    for (let c = 0; c < player.gameboard.getCols() + 1; c++) {
+      if (r === 0 && c === 0) {
+        const label = document.createElement("div");
+        primaryBoardContainer.appendChild(label);
+        continue;
+      }
+
+      if (r === 0) {
+        const label = document.createElement("div");
+        label.textContent = letterLabels[c - 1];
+        primaryBoardContainer.appendChild(label);
+        continue;
+      }
       const square = document.createElement("button");
 
       // Add class, row/col data attribute to element
