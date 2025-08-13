@@ -43,18 +43,17 @@ ul {
 
 .board-labels {
   display: grid;
-  grid-template-columns: repeat(2, 309px);
+  grid-template-columns: repeat(2, 330px);
   place-items: center;
   justify-content: center;
-  gap: 150px;
+  gap: 180px;
 }
 
 .gameboards {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr 180px 1fr;
   place-self: center;
   place-items: center;
-  gap: 150px;
   max-width: fit-content;
   margin: 0 auto;
   position: relative;
@@ -62,8 +61,8 @@ ul {
 
 .primary-board {
   display: grid;
-  grid-template-rows: repeat(10, 30px);
-  grid-template-columns: repeat(10, 30px);
+  grid-template-rows: repeat(11, 30px);
+  grid-template-columns: repeat(11, 30px);
   gap: 1px;
   background-color: black;
   border: 1px solid black;
@@ -73,13 +72,23 @@ ul {
 
 .secondary-board {
   display: grid;
-  grid-template-rows: repeat(10, 30px);
-  grid-template-columns: repeat(10, 30px);
+  grid-template-rows: repeat(11, 30px);
+  grid-template-columns: repeat(11, 30px);
   gap: 1px;
   background-color: black;
   border: 1px solid black;
   width: fit-content;
   margin: 0;
+}
+
+.grid-label-row,
+.grid-label-col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: small;
+  color: grey;
+  background-color: rgb(56, 56, 56);
 }
 
 .primarySquare,
@@ -103,37 +112,49 @@ ul {
 }
 
 .shipStartH {
-  border-top: 1px solid;
-  border-left: 1px solid;
-  border-bottom: 1px solid;
+  border-top: 1px solid rgb(56, 56, 56);
+  border-left: 1px solid rgb(56, 56, 56);
+  border-bottom: 1px solid rgb(56, 56, 56);
 }
 
 .shipStartV {
-  border-top: 1px solid;
-  border-left: 1px solid;
-  border-right: 1px solid;
+  border-top: 1px solid rgb(56, 56, 56);
+  border-left: 1px solid rgb(56, 56, 56);
+  border-right: 1px solid rgb(56, 56, 56);
 }
 
 .shipMidH {
-  border-top: 1px solid;
-  border-bottom: 1px solid;
+  border-top: 1px solid rgb(56, 56, 56);
+  border-bottom: 1px solid rgb(56, 56, 56);
 }
 
 .shipMidV {
-  border-left: 1px solid;
-  border-right: 1px solid;
+  border-left: 1px solid rgb(56, 56, 56);
+  border-right: 1px solid rgb(56, 56, 56);
 }
 
 .shipEndH {
-  border-top: 1px solid;
-  border-right: 1px solid;
-  border-bottom: 1px solid;
+  border-top: 1px solid rgb(56, 56, 56);
+  border-right: 1px solid rgb(56, 56, 56);
+  border-bottom: 1px solid rgb(56, 56, 56);
 }
 
 .shipEndV {
-  border-left: 1px solid;
-  border-right: 1px solid;
-  border-bottom: 1px solid;
+  border-left: 1px solid rgb(56, 56, 56);
+  border-right: 1px solid rgb(56, 56, 56);
+  border-bottom: 1px solid rgb(56, 56, 56);
+}
+
+.gameStart {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  gap: 20px;
+}
+
+.startGameButton {
+  width: fit-content;
 }
 
 .gameOver {
@@ -142,8 +163,8 @@ ul {
   position: absolute;
   align-items: center;
   justify-content: center;
-  top: 50px;
-  left: 175px;
+  top: 70px;
+  left: 235px;
   height: 200px;
   width: 420px;
 }

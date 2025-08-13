@@ -9,6 +9,7 @@ import {
   msgPlaceShips,
   msgCPUShipSunk,
   msgHumanShipSunk,
+  msgAttack,
   msgClear,
   msgCPUTurn,
   msgHumanTurn,
@@ -43,7 +44,7 @@ async function game() {
 
   reset();
   await preGame(human, cpu);
-  msgClear();
+  msgAttack();
   disableButtons();
 
   // Game loop until a player's ships are sunk

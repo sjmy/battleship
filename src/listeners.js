@@ -28,6 +28,7 @@ function startGameListener() {
 
   return new Promise((resolve) => {
     startButton.addEventListener("click", () => {
+      startButton.style.display = "none";
       resolve();
     });
   });

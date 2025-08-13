@@ -38,8 +38,8 @@ function renderPrimaryBoard(player) {
   primaryBoardContainer.textContent = "";
 
   // For each square, create a button
-  for (let r = 0; r < player.gameboard.getRows() + 1; r++) {
-    for (let c = 0; c < player.gameboard.getCols() + 1; c++) {
+  for (let r = 0; r <= player.gameboard.getRows(); r++) {
+    for (let c = 0; c <= player.gameboard.getCols(); c++) {
       if (r === 0 && c === 0) {
         const label = document.createElement("div");
         primaryBoardContainer.appendChild(label);
@@ -49,48 +49,58 @@ function renderPrimaryBoard(player) {
       if (r === 0) {
         const label = document.createElement("div");
         label.textContent = letterLabels[c - 1];
+        label.classList.add("grid-label-col");
         primaryBoardContainer.appendChild(label);
         continue;
       }
+
+      if (c === 0) {
+        const label = document.createElement("div");
+        label.textContent = numberLabels[r - 1];
+        label.classList.add("grid-label-row");
+        primaryBoardContainer.appendChild(label);
+        continue;
+      }
+
       const square = document.createElement("button");
 
       // Add class, row/col data attribute to element
       square.classList.add("primarySquare");
-      square.dataset.row = `${r}`;
-      square.dataset.col = `${c}`;
+      square.dataset.row = `${r - 1}`;
+      square.dataset.col = `${c - 1}`;
 
       // Check if it's a missed attack
-      if (checkForMiss(missedAttacks, r, c)) {
+      if (checkForMiss(missedAttacks, r - 1, c - 1)) {
         square.classList.add("miss");
         primaryBoardContainer.appendChild(square);
         continue;
       }
 
       // If the square is not empty and not a miss, it's a ship
-      if (primaryBoard[r][c] !== null) {
-        const ship = primaryBoard[r][c];
+      if (primaryBoard[r - 1][c - 1] !== null) {
+        const ship = primaryBoard[r - 1][c - 1];
         const startPosition = ship.getStartPosition();
         const shipLength = ship.getLength();
         const hitsArray = ship.getHitsArray();
 
         if (ship.getHorizontal()) {
-          if (r === startPosition[0] && c === startPosition[1]) {
+          if (r - 1 === startPosition[0] && c - 1 === startPosition[1]) {
             square.classList.add("shipStartH");
-          } else if (c === startPosition[1] + shipLength - 1) {
+          } else if (c - 1 === startPosition[1] + shipLength - 1) {
             square.classList.add("shipEndH");
           } else {
             square.classList.add("shipMidH");
           }
-        } else if (r === startPosition[0] && c === startPosition[1]) {
+        } else if (r - 1 === startPosition[0] && c - 1 === startPosition[1]) {
           square.classList.add("shipStartV");
-        } else if (r === startPosition[0] + shipLength - 1) {
+        } else if (r - 1 === startPosition[0] + shipLength - 1) {
           square.classList.add("shipEndV");
         } else {
           square.classList.add("shipMidV");
         }
 
         // Check it it's a hit
-        if (checkForHit(hitsArray, r, c)) {
+        if (checkForHit(hitsArray, r - 1, c - 1)) {
           square.classList.add("hit");
         }
 
@@ -106,22 +116,46 @@ function renderSecondaryBoard(player, opponent) {
   const secondaryBoardContainer = document.querySelector(".secondary-board");
   const oppPrimaryBoard = opponent.gameboard.getPrimaryBoard();
   const missedAttacks = opponent.gameboard.getMissedAttacksAgainst();
+  const letterLabels = "ABCDEFGHIJ";
+  const numberLabels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   // Resets the board
   secondaryBoardContainer.textContent = "";
 
   // For each square, create a button
-  for (let r = 0; r < player.gameboard.getRows(); r++) {
-    for (let c = 0; c < player.gameboard.getCols(); c++) {
+  for (let r = 0; r <= player.gameboard.getRows(); r++) {
+    for (let c = 0; c <= player.gameboard.getCols(); c++) {
+      if (r === 0 && c === 0) {
+        const label = document.createElement("div");
+        secondaryBoardContainer.appendChild(label);
+        continue;
+      }
+
+      if (r === 0) {
+        const label = document.createElement("div");
+        label.textContent = letterLabels[c - 1];
+        label.classList.add("grid-label-col");
+        secondaryBoardContainer.appendChild(label);
+        continue;
+      }
+
+      if (c === 0) {
+        const label = document.createElement("div");
+        label.textContent = numberLabels[r - 1];
+        label.classList.add("grid-label-row");
+        secondaryBoardContainer.appendChild(label);
+        continue;
+      }
+
       const square = document.createElement("button");
 
       // Add class, row/col data attribute to element
       square.classList.add("secondarySquare");
-      square.dataset.row = `${r}`;
-      square.dataset.col = `${c}`;
+      square.dataset.row = `${r - 1}`;
+      square.dataset.col = `${c - 1}`;
 
       // Check if it's a missed attack
-      if (checkForMiss(missedAttacks, r, c)) {
+      if (checkForMiss(missedAttacks, r - 1, c - 1)) {
         square.classList.add("miss");
         square.disabled = "true";
         secondaryBoardContainer.appendChild(square);
@@ -129,11 +163,11 @@ function renderSecondaryBoard(player, opponent) {
       }
 
       // If the square is not empty and not a miss, it's a ship
-      if (oppPrimaryBoard[r][c] !== null) {
-        const hitsArray = oppPrimaryBoard[r][c].getHitsArray();
+      if (oppPrimaryBoard[r - 1][c - 1] !== null) {
+        const hitsArray = oppPrimaryBoard[r - 1][c - 1].getHitsArray();
 
         // Check it it's a hit
-        if (checkForHit(hitsArray, r, c)) {
+        if (checkForHit(hitsArray, r - 1, c - 1)) {
           square.classList.add("hit");
         }
       }
@@ -199,6 +233,11 @@ function msgPlaceShips() {
   infoDiv.textContent = "Place your ships.";
 }
 
+function msgAttack() {
+  const infoDiv = document.querySelector(".info");
+  infoDiv.textContent = "Attack the CPU grid!";
+}
+
 function removeSunkShipClass() {
   const infoDiv = document.querySelector(".info");
   infoDiv.classList.remove("sunk-ship");
@@ -236,6 +275,7 @@ export {
   gameOver,
   msgClear,
   msgPlaceShips,
+  msgAttack,
   msgCPUShipSunk,
   msgHumanShipSunk,
   msgCPUTurn,
