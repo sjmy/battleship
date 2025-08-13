@@ -20,6 +20,7 @@ body {
   color: antiquewhite;
   height: 60%;
   margin-top: 50px;
+  min-width: 865px;
 }
 
 h1,
@@ -39,6 +40,8 @@ ul {
   display: flex;
   justify-content: center;
   height: 30px;
+  padding-bottom: 10px;
+  min-width: 865px;
 }
 
 .board-labels {
@@ -47,6 +50,8 @@ ul {
   place-items: center;
   justify-content: center;
   gap: 180px;
+  padding-bottom: 10px;
+  min-width: 865px;
 }
 
 .gameboards {
