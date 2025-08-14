@@ -81,8 +81,13 @@ async function game() {
     // Log attack. If it's a hit, check if it's sunk
     if (human.gameboard.receiveAttack(x, y)) {
       let ship = human.gameboard.getPrimaryBoard()[x][y];
+      let currentShipHitArray = cpu.gameboard.getCurrentShipHitArray();
+
       if (ship.isSunk()) {
         msgHumanShipSunk(ship);
+        cpu.gameboard.resetCurrentShipHitArray();
+      } else {
+        currentShipHitArray.unshift([x, y]);
       }
     }
 

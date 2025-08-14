@@ -12,6 +12,8 @@ export default function Gameboard() {
   let secondaryBoard = [];
   let missedAttacksAgainst = [];
   let ships = [];
+  // Log hits that have not sunk a ship. Used for smarter CPU attacks.
+  let currentShipHitArray = [];
 
   function getRows() {
     return rows;
@@ -37,11 +39,20 @@ export default function Gameboard() {
     return ships;
   }
 
+  function getCurrentShipHitArray() {
+    return currentShipHitArray;
+  }
+
+  function resetCurrentShipHitArray() {
+    currentShipHitArray = [];
+  }
+
   function initializeGameboard() {
     buildBoards();
     ships = [];
     buildShips();
     missedAttacksAgainst = [];
+    currentShipHitArray = [];
   }
 
   // Populate pimaryBoard and secondaryBoard with null values
@@ -149,6 +160,17 @@ export default function Gameboard() {
       }
     }
 
+    // If there is a ship that has hits but is not sunk, attack adjacent squares
+    if (currentShipHitArray.length !== 0) {
+      return new Promise((resolve) => {
+        setTimeout(
+          () => resolve(cpuSmartAttack(missedAttacks, humanShips, totalHits)),
+          getRandomDelay(),
+        );
+      });
+    }
+
+    // Check if the square has been chosen before
     while (checkForMiss(missedAttacks, x, y) || checkForHit(totalHits, x, y)) {
       [x, y] = getRandomCoordinates();
     }
@@ -158,12 +180,77 @@ export default function Gameboard() {
     });
   }
 
+  // Use currentShipHitArray to find the next logical square. Returns [x, y]
+  // If there is only one hit, choose x + 1 or x - 1 and y
+  // If there is more than one hit, check if x coords are +1 or -1
+  //  If true, choose the next x in sequence and y
+  //  If false, choose x and the next y in sequence
+  function cpuSmartAttack(missedAttacks, humanShips, totalHits) {
+    let x = currentShipHitArray[0][0];
+    let y = currentShipHitArray[0][1];
+
+    if (currentShipHitArray.length === 1) {
+      [x, y] = getCloseCoordinates(x, y);
+
+      while (
+        checkForMiss(missedAttacks, x, y) ||
+        checkForHit(totalHits, x, y)
+      ) {
+        [x, y] = getCloseCoordinates(x, y);
+      }
+    } else {
+      let xHits = [];
+      let yHits = [];
+
+      for (let i = 1; i < currentShipHitArray.length; i++) {
+        xHits.push(currentShipHitArray[i][0]);
+        yHits.push(currentShipHitArray[i][1]);
+      }
+
+      xHits.sort();
+      yHits.sort();
+
+      if (xHits[xHits.length - 1] - xHits[0] === xHits.length - 1) {
+        // x coords are in sequence, choose another x
+
+        // If the first hit is row 0, choose the last row hit + 1
+        if (xHits[0] === 0) {
+          x = xHits[xHits.length - 1] + 1;
+          // If the last hit is row 9, choose the first row hit - 1
+        } else if (xHits[xHits.length - 1] === 9) {
+          x = xHits[0] - 1;
+        } else if (
+          checkForMiss(missedAttacks, x + 1, y) ||
+          checkForHit(totalHits, x + 1, y)
+        ) {
+          x -= 1;
+        }
+        // y coords must be in sequence, choose another y
+
+        // If the first hit is col 0, choose the last col hit + 1
+      } else if (yHits[0] === 0) {
+        y = yHits[yHits.length - 1] + 1;
+        // If the last hit is col 9, choose the first col hit - 1
+      } else if (yHits[yHits.length - 1] === 9) {
+        y = yHits[0] - 1;
+      } else if (
+        checkForMiss(missedAttacks, y + 1, y) ||
+        checkForHit(totalHits, y + 1, y)
+      ) {
+        y -= 1;
+      }
+    }
+
+    return [x, y];
+  }
+
   // Takes a pair of coordinates, determines whether or not the attack hit a ship
   // Then sends the ‘hit’ function to the correct ship, or records the coordinates of the missed shot
   // Return true if it's a hit, false if it's a miss
   function receiveAttack(x, y) {
     if (primaryBoard[x][y] !== null) {
-      primaryBoard[x][y].hit([x, y]);
+      const currentShip = primaryBoard[x][y];
+      currentShip.hit([x, y]);
       return true;
     } else {
       missedAttacksAgainst.push([x, y]);
@@ -229,6 +316,31 @@ export default function Gameboard() {
     return false;
   }
 
+  function getCloseCoordinates(x, y) {
+    let origX = x;
+    let origY = y;
+
+    if (getRandomBoolean()) {
+      if (getRandomBoolean()) {
+        x += 1;
+      } else {
+        x -= 1;
+      }
+    } else {
+      if (getRandomBoolean()) {
+        y += 1;
+      } else {
+        y -= 1;
+      }
+    }
+
+    if (x < 0 || x > 9 || y < 0 || y > 9) {
+      getCloseCoordinates(origX, origY);
+    }
+
+    return [x, y];
+  }
+
   initializeGameboard();
 
   return {
@@ -238,6 +350,8 @@ export default function Gameboard() {
     getSecondaryBoard,
     getMissedAttacksAgainst,
     getShips,
+    getCurrentShipHitArray,
+    resetCurrentShipHitArray,
     placeShip,
     receiveAttack,
     allShipsSunk,

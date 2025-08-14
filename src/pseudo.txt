@@ -22,6 +22,8 @@ TODO:
     - if hit but ship not sunk, choose adjacent squares until sunk
     - record hits that haven't sunk a ship to choose next logical square
       - ie two hits in a row horizontally that haven't sunk a ship, choose on the horizontal
+  - disable ability to click on square that is already a hit
+    - currently a CPU ship can be sunk by clicking on a hit square until it sinks
 
 
 Ship object
