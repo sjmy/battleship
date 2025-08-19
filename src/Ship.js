@@ -7,6 +7,8 @@ export default function Ship(shipLength) {
   let horizontal = true;
   // Set in placeShip() in Gameboard.js. Used with horizontal and length for styling
   let startPosition;
+  let shipCoordinates = [];
+  let legalChoices = new Map();
   let shipName;
 
   function getLength() {
@@ -41,12 +43,194 @@ export default function Ship(shipLength) {
     startPosition = [x, y];
   }
 
+  function getShipCoordinates() {
+    return shipCoordinates;
+  }
+
+  function setShipCoordinates(x, y, isHorizontal) {
+    shipCoordinates.push([x, y]);
+
+    if (isHorizontal) {
+      for (let i = 1; i < getLength(); i++) {
+        shipCoordinates.push([x, y + i]);
+      }
+    } else {
+      for (let i = 1; i < getLength(); i++) {
+        shipCoordinates.push([x + i, y]);
+        changeOrientation();
+      }
+    }
+
+    setLegalChoices(isHorizontal);
+  }
+
   function getShipName() {
     return shipName;
   }
 
   function setShipName(name) {
     shipName = name;
+  }
+
+  function getLegalChoices() {
+    return legalChoices;
+  }
+
+  function setLegalChoices(isHorizontal) {
+    for (let i = 0; i < getLength(); i++) {
+      let x = shipCoordinates[i][0];
+      let y = shipCoordinates[i][1];
+      let key = JSON.stringify([x, y]);
+
+      // If first square of the ship
+      if (i === 0) {
+        if (isHorizontal) {
+          // Horizontal
+          if (x === 0 && y === 0) {
+            legalChoices.set(key, [[x + 1, y]]);
+          } else if (x === 9 && y === 0) {
+            legalChoices.set(key, [[x - 1, y]]);
+          } else if (x === 0) {
+            legalChoices.set(key, [
+              [x + 1, y],
+              [x, y - 1],
+            ]);
+          } else if (x === 9) {
+            legalChoices.set(key, [
+              [x - 1, y],
+              [x, y - 1],
+            ]);
+          } else if (y === 0) {
+            legalChoices.set(key, [
+              [x - 1, y],
+              [x + 1, y],
+            ]);
+          } else {
+            legalChoices.set(key, [
+              [x - 1, y],
+              [x + 1, y],
+              [x, y - 1],
+            ]);
+          }
+        } else {
+          // Vertical
+          if (x === 0 && y === 0) {
+            legalChoices.set(key, [[x, y + 1]]);
+          } else if (x === 0 && y === 9) {
+            legalChoices.set(key, [[x, y - 1]]);
+          } else if (y === 0) {
+            legalChoices.set(key, [
+              [x, y + 1],
+              [x - 1, y],
+            ]);
+          } else if (y === 9) {
+            legalChoices.set(key, [
+              [x, y - 1],
+              [x - 1, y],
+            ]);
+          } else if (x === 0) {
+            legalChoices.set(key, [
+              [x, y + 1],
+              [x, y - 1],
+            ]);
+          } else {
+            legalChoices.set(key, [
+              [x - 1, y],
+              [x, y + 1],
+              [x, y - 1],
+            ]);
+          }
+        }
+
+        // If last square of the ship
+      } else if (i === getLength() - 1) {
+        if (isHorizontal) {
+          // Horizontal
+          if (x === 9 && y === 9) {
+            legalChoices.set(key, [[x - 1, y]]);
+          } else if (x === 0 && y === 9) {
+            legalChoices.set(key, [[x + 1, y]]);
+          } else if (x === 0) {
+            legalChoices.set(key, [
+              [x + 1, y],
+              [x, y + 1],
+            ]);
+          } else if (y === 9) {
+            legalChoices.set(key, [
+              [x + 1, y],
+              [x - 1, y],
+            ]);
+          } else if (x === 9) {
+            legalChoices.set(key, [
+              [x, y + 1],
+              [x - 1, y],
+            ]);
+          } else {
+            legalChoices.set(key, [
+              [x - 1, y],
+              [x + 1, y],
+              [x, y + 1],
+            ]);
+          }
+        } else {
+          // Vertical
+          if (x === 9 && y === 9) {
+            legalChoices.set(key, [[x, y - 1]]);
+          } else if (x === 9 && y === 0) {
+            legalChoices.set(key, [[x, y + 1]]);
+          } else if (y === 0) {
+            legalChoices.set(key, [
+              [x + 1, y],
+              [x, y + 1],
+            ]);
+          } else if (y === 9) {
+            legalChoices.set(key, [
+              [x + 1, y],
+              [x, y - 1],
+            ]);
+          } else if (x === 9) {
+            legalChoices.set(key, [
+              [x, y + 1],
+              [x, y - 1],
+            ]);
+          } else {
+            legalChoices.set(key, [
+              [x + 1, y],
+              [x, y + 1],
+              [x, y - 1],
+            ]);
+          }
+        }
+
+        // Inner ship squares
+      } else if (isHorizontal) {
+        // Horizontal
+        if (x === 0) {
+          legalChoices.set(key, [[x + 1, y]]);
+        } else if (x === 9) {
+          legalChoices.set(key, [[x - 1, y]]);
+        } else {
+          legalChoices.set(key, [
+            [x + 1, y],
+            [x - 1, y],
+          ]);
+        }
+      } else {
+        // Vertical
+        if (y === 0) {
+          legalChoices.set(key, [[x, y + 1]]);
+        } else if (y === 9) {
+          legalChoices.set(key, [[x, y - 1]]);
+        } else {
+          legalChoices.set(key, [
+            [x, y + 1],
+            [x, y - 1],
+          ]);
+        }
+      }
+      // console.log(legalChoices.get(key));
+    }
+    // console.table(legalChoices);
   }
 
   // Increases the number of ‘hits’ on the ship, adds hit to hitsArray
@@ -72,6 +256,9 @@ export default function Ship(shipLength) {
     changeOrientation,
     getStartPosition,
     setStartPosition,
+    getShipCoordinates,
+    setShipCoordinates,
+    getLegalChoices,
     getShipName,
     setShipName,
     hit,

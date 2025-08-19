@@ -58,6 +58,64 @@ describe("ship functionality tests", () => {
     expect(startPosition[1]).toBe(8);
   });
 
+  test("getHorizontal() returns true for horizontal", () => {
+    ship2.setShipCoordinates(4, 8, true);
+    expect(ship2.getHorizontal()).toBe(true);
+  });
+
+  test("getHorizontal() returns false for vertical", () => {
+    ship2.setShipCoordinates(4, 8, false);
+    expect(ship2.getHorizontal()).toBe(false);
+  });
+
+  test("get/setShipCoordinates horizontal: length of array and array values are correct", () => {
+    ship2.setShipCoordinates(4, 8, true);
+
+    const shipCoordinates = ship2.getShipCoordinates();
+
+    expect(shipCoordinates.length).toBe(2);
+    expect(shipCoordinates[0][0]).toBe(4);
+    expect(shipCoordinates[0][1]).toBe(8);
+    expect(shipCoordinates[1][0]).toBe(4);
+    expect(shipCoordinates[1][1]).toBe(9);
+  });
+
+  test("get/setShipCoordinates vertical: length of array and array values are correct", () => {
+    ship2.setShipCoordinates(4, 8, false);
+
+    const shipCoordinates = ship2.getShipCoordinates();
+
+    expect(shipCoordinates.length).toBe(2);
+    expect(shipCoordinates[0][0]).toBe(4);
+    expect(shipCoordinates[0][1]).toBe(8);
+    expect(shipCoordinates[1][0]).toBe(5);
+    expect(shipCoordinates[1][1]).toBe(8);
+  });
+
+  test("setLegalChoices horizontal: each ship square returns adjacent non-ship squares", () => {
+    ship2.setShipCoordinates(4, 8, true);
+
+    const legalChoices = ship2.getLegalChoices();
+
+    expect(legalChoices.get(JSON.stringify([4, 8]))).toEqual([
+      [3, 8],
+      [5, 8],
+      [4, 7],
+    ]);
+  });
+
+  test("setLegalChoices vertical: each ship square returns adjacent non-ship squares", () => {
+    ship2.setShipCoordinates(4, 8, false);
+
+    const legalChoices = ship2.getLegalChoices();
+
+    expect(legalChoices.get(JSON.stringify([4, 8]))).toEqual([
+      [3, 8],
+      [4, 9],
+      [4, 7],
+    ]);
+  });
+
   test("get/setShipName: sets and returns the string", () => {
     ship2.setShipName("Helicopter");
 

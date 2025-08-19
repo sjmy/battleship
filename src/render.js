@@ -169,6 +169,7 @@ function renderSecondaryBoard(player, opponent) {
         // Check it it's a hit
         if (checkForHit(hitsArray, r - 1, c - 1)) {
           square.classList.add("hit");
+          square.disabled = "true";
         }
       }
 

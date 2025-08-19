@@ -106,6 +106,7 @@ export default function Gameboard() {
           primaryBoard[x][y + i] = ship;
         }
         ship.setStartPosition(x, y);
+        ship.setShipCoordinates(x, y, ship.getHorizontal());
         return true;
       }
 
@@ -124,6 +125,7 @@ export default function Gameboard() {
           primaryBoard[x + i][y] = ship;
         }
         ship.setStartPosition(x, y);
+        ship.setShipCoordinates(x, y, ship.getHorizontal());
         return true;
       }
     }
