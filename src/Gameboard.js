@@ -43,8 +43,17 @@ export default function Gameboard() {
     return currentShipHitArray;
   }
 
-  function resetCurrentShipHitArray() {
-    currentShipHitArray = [];
+  // Removes ship coordinates from currentShipHitArray. Called when a ship is sunk.
+  function updateCurrentShipHitArray(ship) {
+    for (let i = 0; i < currentShipHitArray.length; i++) {
+      let shipCoordinates = ship.getShipCoordinates();
+
+      for (let j = 0; j < shipCoordinates.length; j++) {
+        if (comparePositions(currentShipHitArray[i], shipCoordinates[j])) {
+          currentShipHitArray.splice(i, 1);
+        }
+      }
+    }
   }
 
   function initializeGameboard() {
@@ -101,12 +110,14 @@ export default function Gameboard() {
             return false;
           }
         }
+
+        ship.setStartPosition(x, y);
+        ship.setShipCoordinates(x, y, ship.getHorizontal());
+
         // Passed the checks, place the ship
         for (let i = 0; i < ship.getLength(); i++) {
           primaryBoard[x][y + i] = ship;
         }
-        ship.setStartPosition(x, y);
-        ship.setShipCoordinates(x, y, ship.getHorizontal());
         return true;
       }
 
@@ -120,12 +131,14 @@ export default function Gameboard() {
             return false;
           }
         }
+
+        ship.setStartPosition(x, y);
+        ship.setShipCoordinates(x, y, ship.getHorizontal());
+
         // Passed the checks, place the ship
         for (let i = 0; i < ship.getLength(); i++) {
           primaryBoard[x + i][y] = ship;
         }
-        ship.setStartPosition(x, y);
-        ship.setShipCoordinates(x, y, ship.getHorizontal());
         return true;
       }
     }
@@ -151,7 +164,7 @@ export default function Gameboard() {
 
   // Returns random coordinates after delay
   // TODO: if hit try adjacent squares until ship is sunk
-  function cpuTurn(missedAttacks, humanShips) {
+  function cpuTurn(missedAttacks, humanShips, humanPrimaryBoard) {
     let [x, y] = getRandomCoordinates();
     let totalHits = [];
 
@@ -166,7 +179,15 @@ export default function Gameboard() {
     if (currentShipHitArray.length !== 0) {
       return new Promise((resolve) => {
         setTimeout(
-          () => resolve(cpuSmartAttack(missedAttacks, humanShips, totalHits)),
+          () =>
+            resolve(
+              cpuSmarterAttack(
+                missedAttacks,
+                humanShips,
+                totalHits,
+                humanPrimaryBoard,
+              ),
+            ),
           getRandomDelay(),
         );
       });
@@ -180,6 +201,73 @@ export default function Gameboard() {
     return new Promise((resolve) => {
       setTimeout(() => resolve([x, y]), getRandomDelay());
     });
+  }
+
+  // Returns [x, y]
+  // We know there is a ship with hits that hasn't been sunk (currentShipHitArray is not empty)
+  // For each square in currentShipHitArray, choose from legalChoices
+  //  - this will ensure the ship gets sunk. currentShipHitArray is reset when a ship is sunk
+
+  // At the moment this is choosing all the squares adjacent to the ship itself, but never the other unhit ship squares!
+  // If the legalChoices for a square are exhausted, try an adjacent ship square
+  //  - if no adjacent ship squares, try any unhit ship square
+  // Maybe adjacent unhit ship squares should be part of the legalChoices. Feels like that's the easiest answer
+  function cpuSmarterAttack(
+    missedAttacks,
+    humanShips,
+    totalHits,
+    humanPrimaryBoard,
+  ) {
+    for (let i = 0; i < currentShipHitArray.length; i++) {
+      let hitX = currentShipHitArray[i][0];
+      let hitY = currentShipHitArray[i][1];
+      let currentShip = humanPrimaryBoard[hitX][hitY];
+      let legalChoices = currentShip.getLegalChoices();
+      let keys = legalChoices.keys();
+      let values = legalChoices.values();
+      let key = keys.next();
+
+      for (let array of values) {
+        for (let j = 0; j < array.length; j++) {
+          return array[j];
+        }
+
+        key = keys.next();
+
+        while (
+          checkForMiss(missedAttacks, JSON.parse(key.value)) ||
+          checkForHit(totalHits, JSON.parse(key.value))
+        ) {
+          key = keys.next();
+        }
+
+        return JSON.parse(key.value);
+      }
+    }
+  }
+
+  // For each CPU turn, search through the each ship's legalChoices and remove the coordinate if it matches
+  // This ensures the square won't be chosen during cpuSmartAttack
+  function updateLegalChoices(x, y) {
+    const square = JSON.stringify([x, y]);
+
+    for (let i = 0; i < ships.length; i++) {
+      let legalChoices = ships[i].getLegalChoices();
+      let keys = legalChoices.keys();
+      let values = legalChoices.values();
+      let key = keys.next();
+
+      for (let array of values) {
+        let newValues = [];
+        for (let j = 0; j < array.length; j++) {
+          if (square !== JSON.stringify(array[j])) {
+            newValues.push(array[j]);
+          }
+        }
+        legalChoices.set(key.value, newValues);
+        key = keys.next();
+      }
+    }
   }
 
   // Use currentShipHitArray to find the next logical square. Returns [x, y]
@@ -353,12 +441,13 @@ export default function Gameboard() {
     getMissedAttacksAgainst,
     getShips,
     getCurrentShipHitArray,
-    resetCurrentShipHitArray,
+    updateCurrentShipHitArray,
     placeShip,
     receiveAttack,
     allShipsSunk,
     cpuTurn,
     initializeGameboard,
     randomShipPlacement,
+    updateLegalChoices,
   };
 }

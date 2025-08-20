@@ -18,20 +18,17 @@ TODO:
     - need to outline ships for clarity DONE
     - pictures of ships under each player, show hits/sunk
     - abcdefgh 12345 DONE
-  - smarter CPU
-    - if hit but ship not sunk, choose adjacent squares until sunk
-    - record hits that haven't sunk a ship to choose next logical square
-      - ie two hits in a row horizontally that haven't sunk a ship, choose on the horizontal
   - disable ability to click on square that is already a hit DONE
     - currently a CPU ship can be sunk by clicking on a hit square until it sinks
-  - create a set of legal choices for each ship node using a Map() DONE
-    - example: for a horizontal patrolBoat starting at [4, 4] DONE
-    - legalChoices.set([4, 4], [[3, 4], [4, 3], [5, 4]]) DONE
-    - legalChoices.set([4, 5], [[3, 5], [4, 6], [5, 5]]) DONE
-    - for each cpuTurn, remove legal choices for each ship that is not sunk
-    - then when a hit is made, add it to the currentShipHitArray
-      - as long as the currentShipHitArray is not empty, choose from legalChoices for that square
-      - if no more choices exist for that square, choose from remaining options in legalChoices
+  - smarter CPU
+    - create a set of legal choices for each ship node using a Map() DONE
+      - example: for a horizontal patrolBoat starting at [4, 4] DONE
+      - legalChoices.set([4, 4], [[3, 4], [4, 3], [5, 4]]) DONE
+      - legalChoices.set([4, 5], [[3, 5], [4, 6], [5, 5]]) DONE
+      - for each cpuTurn, remove legal choices for each ship that is not sunk DONE
+      - then when a hit is made, add it to the currentShipHitArray
+        - as long as the currentShipHitArray is not empty, choose from legalChoices for that square
+        - if no more choices exist for that square, choose from remaining options in legalChoices
 
 
 Ship object

@@ -282,4 +282,35 @@ describe("Gameboard functionality tests", () => {
 
     expect(count).toEqual(shipSquares);
   });
+
+  test("updateLegalChoices: coordinate is removed from legalChoices for all ships if it matches", () => {
+    placeShipsHorizontally();
+
+    let legalChoices = carrier.getLegalChoices();
+    let values = legalChoices.values();
+    let square = JSON.stringify([0, 1]);
+    let found = false;
+
+    for (array of values) {
+      for (let i = 0; i < array.length; i++) {
+        if (square === JSON.stringify(array[i])) {
+          found = true;
+        }
+      }
+    }
+    expect(found).toEqual(true);
+
+    human.updateLegalChoices(0, 1);
+    found = false;
+
+    for (array of values) {
+      for (let i = 0; i < array.length; i++) {
+        if (square === JSON.stringify(array[i])) {
+          found = true;
+        }
+      }
+    }
+
+    expect(found).toEqual(false);
+  });
 });

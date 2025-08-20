@@ -57,11 +57,10 @@ export default function Ship(shipLength) {
     } else {
       for (let i = 1; i < getLength(); i++) {
         shipCoordinates.push([x + i, y]);
-        changeOrientation();
       }
     }
 
-    setLegalChoices(isHorizontal);
+    setLegalChoices();
   }
 
   function getShipName() {
@@ -76,7 +75,7 @@ export default function Ship(shipLength) {
     return legalChoices;
   }
 
-  function setLegalChoices(isHorizontal) {
+  function setLegalChoices() {
     for (let i = 0; i < getLength(); i++) {
       let x = shipCoordinates[i][0];
       let y = shipCoordinates[i][1];
@@ -84,7 +83,7 @@ export default function Ship(shipLength) {
 
       // If first square of the ship
       if (i === 0) {
-        if (isHorizontal) {
+        if (horizontal) {
           // Horizontal
           if (x === 0 && y === 0) {
             legalChoices.set(key, [[x + 1, y]]);
@@ -144,7 +143,7 @@ export default function Ship(shipLength) {
 
         // If last square of the ship
       } else if (i === getLength() - 1) {
-        if (isHorizontal) {
+        if (horizontal) {
           // Horizontal
           if (x === 9 && y === 9) {
             legalChoices.set(key, [[x - 1, y]]);
@@ -203,7 +202,7 @@ export default function Ship(shipLength) {
         }
 
         // Inner ship squares
-      } else if (isHorizontal) {
+      } else if (horizontal) {
         // Horizontal
         if (x === 0) {
           legalChoices.set(key, [[x + 1, y]]);

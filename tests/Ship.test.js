@@ -64,6 +64,7 @@ describe("ship functionality tests", () => {
   });
 
   test("getHorizontal() returns false for vertical", () => {
+    ship2.changeOrientation();
     ship2.setShipCoordinates(4, 8, false);
     expect(ship2.getHorizontal()).toBe(false);
   });
@@ -105,6 +106,7 @@ describe("ship functionality tests", () => {
   });
 
   test("setLegalChoices vertical: each ship square returns adjacent non-ship squares", () => {
+    ship2.changeOrientation();
     ship2.setShipCoordinates(4, 8, false);
 
     const legalChoices = ship2.getLegalChoices();

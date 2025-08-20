@@ -76,7 +76,10 @@ async function game() {
     [x, y] = await cpu.gameboard.cpuTurn(
       human.gameboard.getMissedAttacksAgainst(),
       human.gameboard.getShips(),
+      human.gameboard.getPrimaryBoard(),
     );
+
+    human.gameboard.updateLegalChoices(x, y);
 
     // Log attack. If it's a hit, check if it's sunk
     if (human.gameboard.receiveAttack(x, y)) {
@@ -85,7 +88,7 @@ async function game() {
 
       if (ship.isSunk()) {
         msgHumanShipSunk(ship);
-        cpu.gameboard.resetCurrentShipHitArray();
+        cpu.gameboard.updateCurrentShipHitArray(ship);
       } else {
         currentShipHitArray.unshift([x, y]);
       }
