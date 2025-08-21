@@ -20,15 +20,15 @@ TODO:
     - abcdefgh 12345 DONE
   - disable ability to click on square that is already a hit DONE
     - currently a CPU ship can be sunk by clicking on a hit square until it sinks
-  - smarter CPU
+  - smarter CPU DONE
     - create a set of legal choices for each ship node using a Map() DONE
       - example: for a horizontal patrolBoat starting at [4, 4] DONE
       - legalChoices.set([4, 4], [[3, 4], [4, 3], [5, 4]]) DONE
       - legalChoices.set([4, 5], [[3, 5], [4, 6], [5, 5]]) DONE
       - for each cpuTurn, remove legal choices for each ship that is not sunk DONE
-      - then when a hit is made, add it to the currentShipHitArray
-        - as long as the currentShipHitArray is not empty, choose from legalChoices for that square
-        - if no more choices exist for that square, choose from remaining options in legalChoices
+      - then when a hit is made, add it to the currentShipHitArray DONE
+        - as long as the currentShipHitArray is not empty, choose from legalChoices for that square DONE
+        - if no more choices exist for that square, choose from remaining options in legalChoices DONE
 
 
 Ship object

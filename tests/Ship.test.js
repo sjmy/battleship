@@ -93,7 +93,7 @@ describe("ship functionality tests", () => {
     expect(shipCoordinates[1][1]).toBe(8);
   });
 
-  test("setLegalChoices horizontal: each ship square returns adjacent non-ship squares", () => {
+  test("setLegalChoices horizontal: each ship square returns adjacent squares", () => {
     ship2.setShipCoordinates(4, 8, true);
 
     const legalChoices = ship2.getLegalChoices();
@@ -102,10 +102,11 @@ describe("ship functionality tests", () => {
       [3, 8],
       [5, 8],
       [4, 7],
+      [4, 9],
     ]);
   });
 
-  test("setLegalChoices vertical: each ship square returns adjacent non-ship squares", () => {
+  test("setLegalChoices vertical: each ship square returns adjacent squares", () => {
     ship2.changeOrientation();
     ship2.setShipCoordinates(4, 8, false);
 
@@ -115,6 +116,7 @@ describe("ship functionality tests", () => {
       [3, 8],
       [4, 9],
       [4, 7],
+      [5, 8],
     ]);
   });
 

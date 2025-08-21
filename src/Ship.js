@@ -86,57 +86,77 @@ export default function Ship(shipLength) {
         if (horizontal) {
           // Horizontal
           if (x === 0 && y === 0) {
-            legalChoices.set(key, [[x + 1, y]]);
+            legalChoices.set(key, [
+              [x + 1, y],
+              [x, y + 1],
+            ]);
           } else if (x === 9 && y === 0) {
-            legalChoices.set(key, [[x - 1, y]]);
+            legalChoices.set(key, [
+              [x - 1, y],
+              [x, y + 1],
+            ]);
           } else if (x === 0) {
             legalChoices.set(key, [
               [x + 1, y],
               [x, y - 1],
+              [x, y + 1],
             ]);
           } else if (x === 9) {
             legalChoices.set(key, [
               [x - 1, y],
               [x, y - 1],
+              [x, y + 1],
             ]);
           } else if (y === 0) {
             legalChoices.set(key, [
               [x - 1, y],
               [x + 1, y],
+              [x, y + 1],
             ]);
           } else {
             legalChoices.set(key, [
               [x - 1, y],
               [x + 1, y],
               [x, y - 1],
+              [x, y + 1],
             ]);
           }
         } else {
           // Vertical
           if (x === 0 && y === 0) {
-            legalChoices.set(key, [[x, y + 1]]);
+            legalChoices.set(key, [
+              [x, y + 1],
+              [x + 1, y],
+            ]);
           } else if (x === 0 && y === 9) {
-            legalChoices.set(key, [[x, y - 1]]);
+            legalChoices.set(key, [
+              [x, y - 1],
+              [x + 1, y],
+            ]);
           } else if (y === 0) {
             legalChoices.set(key, [
               [x, y + 1],
               [x - 1, y],
+              [x + 1, y],
             ]);
           } else if (y === 9) {
             legalChoices.set(key, [
               [x, y - 1],
               [x - 1, y],
+              [x + 1, y],
             ]);
           } else if (x === 0) {
             legalChoices.set(key, [
               [x, y + 1],
               [x, y - 1],
+              [x + 1, y],
             ]);
           } else {
             legalChoices.set(key, [
               [x - 1, y],
               [x, y + 1],
               [x, y - 1],
+              [x + 1, y],
             ]);
           }
         }
@@ -146,57 +166,77 @@ export default function Ship(shipLength) {
         if (horizontal) {
           // Horizontal
           if (x === 9 && y === 9) {
-            legalChoices.set(key, [[x - 1, y]]);
+            legalChoices.set(key, [
+              [x - 1, y],
+              [x, y - 1],
+            ]);
           } else if (x === 0 && y === 9) {
-            legalChoices.set(key, [[x + 1, y]]);
+            legalChoices.set(key, [
+              [x + 1, y],
+              [x, y - 1],
+            ]);
           } else if (x === 0) {
             legalChoices.set(key, [
               [x + 1, y],
               [x, y + 1],
+              [x, y - 1],
             ]);
           } else if (y === 9) {
             legalChoices.set(key, [
               [x + 1, y],
               [x - 1, y],
+              [x, y - 1],
             ]);
           } else if (x === 9) {
             legalChoices.set(key, [
               [x, y + 1],
               [x - 1, y],
+              [x, y - 1],
             ]);
           } else {
             legalChoices.set(key, [
               [x - 1, y],
               [x + 1, y],
               [x, y + 1],
+              [x, y - 1],
             ]);
           }
         } else {
           // Vertical
           if (x === 9 && y === 9) {
-            legalChoices.set(key, [[x, y - 1]]);
+            legalChoices.set(key, [
+              [x, y - 1],
+              [x - 1, y],
+            ]);
           } else if (x === 9 && y === 0) {
-            legalChoices.set(key, [[x, y + 1]]);
+            legalChoices.set(key, [
+              [x, y + 1],
+              [x - 1, y],
+            ]);
           } else if (y === 0) {
             legalChoices.set(key, [
               [x + 1, y],
               [x, y + 1],
+              [x - 1, y],
             ]);
           } else if (y === 9) {
             legalChoices.set(key, [
               [x + 1, y],
               [x, y - 1],
+              [x - 1, y],
             ]);
           } else if (x === 9) {
             legalChoices.set(key, [
               [x, y + 1],
               [x, y - 1],
+              [x - 1, y],
             ]);
           } else {
             legalChoices.set(key, [
               [x + 1, y],
               [x, y + 1],
               [x, y - 1],
+              [x - 1, y],
             ]);
           }
         }
@@ -205,25 +245,45 @@ export default function Ship(shipLength) {
       } else if (horizontal) {
         // Horizontal
         if (x === 0) {
-          legalChoices.set(key, [[x + 1, y]]);
+          legalChoices.set(key, [
+            [x + 1, y],
+            [x, y + 1],
+            [x, y - 1],
+          ]);
         } else if (x === 9) {
-          legalChoices.set(key, [[x - 1, y]]);
+          legalChoices.set(key, [
+            [x - 1, y],
+            [x, y + 1],
+            [x, y - 1],
+          ]);
         } else {
           legalChoices.set(key, [
             [x + 1, y],
             [x - 1, y],
+            [x, y + 1],
+            [x, y - 1],
           ]);
         }
       } else {
         // Vertical
         if (y === 0) {
-          legalChoices.set(key, [[x, y + 1]]);
+          legalChoices.set(key, [
+            [x, y + 1],
+            [x + 1, y],
+            [x - 1, y],
+          ]);
         } else if (y === 9) {
-          legalChoices.set(key, [[x, y - 1]]);
+          legalChoices.set(key, [
+            [x, y - 1],
+            [x + 1, y],
+            [x - 1, y],
+          ]);
         } else {
           legalChoices.set(key, [
             [x, y + 1],
             [x, y - 1],
+            [x + 1, y],
+            [x - 1, y],
           ]);
         }
       }

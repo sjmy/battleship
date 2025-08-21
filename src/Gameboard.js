@@ -43,17 +43,12 @@ export default function Gameboard() {
     return currentShipHitArray;
   }
 
-  // Removes ship coordinates from currentShipHitArray. Called when a ship is sunk.
+  // Removes all ship's coordinates from currentShipHitArray. Called when a ship is sunk.
   function updateCurrentShipHitArray(ship) {
-    for (let i = 0; i < currentShipHitArray.length; i++) {
-      let shipCoordinates = ship.getShipCoordinates();
-
-      for (let j = 0; j < shipCoordinates.length; j++) {
-        if (comparePositions(currentShipHitArray[i], shipCoordinates[j])) {
-          currentShipHitArray.splice(i, 1);
-        }
-      }
-    }
+    currentShipHitArray = get2DArrayDifference(
+      currentShipHitArray,
+      ship.getShipCoordinates(),
+    );
   }
 
   function initializeGameboard() {
@@ -181,12 +176,7 @@ export default function Gameboard() {
         setTimeout(
           () =>
             resolve(
-              cpuSmarterAttack(
-                missedAttacks,
-                humanShips,
-                totalHits,
-                humanPrimaryBoard,
-              ),
+              cpuSmartAttack(missedAttacks, totalHits, humanPrimaryBoard),
             ),
           getRandomDelay(),
         );
@@ -206,43 +196,83 @@ export default function Gameboard() {
   // Returns [x, y]
   // We know there is a ship with hits that hasn't been sunk (currentShipHitArray is not empty)
   // For each square in currentShipHitArray, choose from legalChoices
-  //  - this will ensure the ship gets sunk. currentShipHitArray is reset when a ship is sunk
-
-  // At the moment this is choosing all the squares adjacent to the ship itself, but never the other unhit ship squares!
+  //  - this will ensure the ship gets sunk. Sunk ship's coordinates are removed from currentShipHitArray
   // If the legalChoices for a square are exhausted, try an adjacent ship square
   //  - if no adjacent ship squares, try any unhit ship square
-  // Maybe adjacent unhit ship squares should be part of the legalChoices. Feels like that's the easiest answer
-  function cpuSmarterAttack(
-    missedAttacks,
-    humanShips,
-    totalHits,
-    humanPrimaryBoard,
-  ) {
+  function cpuSmartAttack(missedAttacks, totalHits, humanPrimaryBoard) {
     for (let i = 0; i < currentShipHitArray.length; i++) {
       let hitX = currentShipHitArray[i][0];
       let hitY = currentShipHitArray[i][1];
       let currentShip = humanPrimaryBoard[hitX][hitY];
       let legalChoices = currentShip.getLegalChoices();
-      let keys = legalChoices.keys();
-      let values = legalChoices.values();
-      let key = keys.next();
+      let values = legalChoices.get(JSON.stringify([hitX, hitY]));
 
-      for (let array of values) {
-        for (let j = 0; j < array.length; j++) {
-          return array[j];
+      // If the ship has multiple hits, make a more logical choice than the next available legal choice
+      // Will find all the unhit ship squares and squares adjacent to each end of the boat, then randomly choose
+      if (currentShip.getHits() > 1) {
+        let shipCoordinates = currentShip.getShipCoordinates();
+        let hitsArray = currentShip.getHitsArray();
+
+        // Add all ship coordinates that haven't been hit to choices array
+        let choices = get2DArrayDifference(shipCoordinates, hitsArray);
+
+        // Add squares outside of ship ends to choices array based on orientation
+        // Horizontal
+        if (currentShip.getHorizontal()) {
+          let firstSquareX = shipCoordinates[0][0];
+          let firstSquareY = shipCoordinates[0][1];
+          let lastSquareX = shipCoordinates[shipCoordinates.length - 1][0];
+          let lastSquareY = shipCoordinates[shipCoordinates.length - 1][1];
+
+          if (firstSquareY !== 0 && lastSquareY !== 9) {
+            choices.push([firstSquareX, firstSquareY - 1]);
+            choices.push([lastSquareX, lastSquareY + 1]);
+          } else if (firstSquareY === 0) {
+            choices.push([lastSquareX, lastSquareY + 1]);
+          } else if (lastSquareY === 9) {
+            choices.push([firstSquareX, firstSquareY - 1]);
+          }
+
+          // Vertical
+        } else {
+          let firstSquareX = shipCoordinates[0][0];
+          let firstSquareY = shipCoordinates[0][1];
+          let lastSquareX = shipCoordinates[shipCoordinates.length - 1][0];
+          let lastSquareY = shipCoordinates[shipCoordinates.length - 1][1];
+
+          if (firstSquareX !== 0 && lastSquareX !== 9) {
+            choices.push([firstSquareX - 1, firstSquareY]);
+            choices.push([lastSquareX + 1, lastSquareY]);
+          } else if (firstSquareX === 0) {
+            choices.push([lastSquareX + 1, lastSquareY]);
+          } else if (lastSquareX === 9) {
+            choices.push([firstSquareX - 1, firstSquareY]);
+          }
         }
 
-        key = keys.next();
+        // Randomly choose from the choices array
+        let randomInt = getRandomInt(choices.length - 1);
+        let x = choices[randomInt][0];
+        let y = choices[randomInt][1];
 
+        // Check to see if that coordinate has already been chosen. If so, randomly choose again
         while (
-          checkForMiss(missedAttacks, JSON.parse(key.value)) ||
-          checkForHit(totalHits, JSON.parse(key.value))
+          checkForMiss(missedAttacks, x, y) ||
+          checkForHit(totalHits, x, y)
         ) {
-          key = keys.next();
+          randomInt = getRandomInt(choices.length - 1);
+          x = choices[randomInt][0];
+          y = choices[randomInt][1];
         }
 
-        return JSON.parse(key.value);
+        return [x, y];
       }
+
+      if (values.length === 0) {
+        continue;
+      }
+
+      return values[getRandomInt(values.length - 1)];
     }
   }
 
@@ -268,70 +298,6 @@ export default function Gameboard() {
         key = keys.next();
       }
     }
-  }
-
-  // Use currentShipHitArray to find the next logical square. Returns [x, y]
-  // If there is only one hit, choose x + 1 or x - 1 and y
-  // If there is more than one hit, check if x coords are +1 or -1
-  //  If true, choose the next x in sequence and y
-  //  If false, choose x and the next y in sequence
-  function cpuSmartAttack(missedAttacks, humanShips, totalHits) {
-    let x = currentShipHitArray[0][0];
-    let y = currentShipHitArray[0][1];
-
-    if (currentShipHitArray.length === 1) {
-      [x, y] = getCloseCoordinates(x, y);
-
-      while (
-        checkForMiss(missedAttacks, x, y) ||
-        checkForHit(totalHits, x, y)
-      ) {
-        [x, y] = getCloseCoordinates(x, y);
-      }
-    } else {
-      let xHits = [];
-      let yHits = [];
-
-      for (let i = 1; i < currentShipHitArray.length; i++) {
-        xHits.push(currentShipHitArray[i][0]);
-        yHits.push(currentShipHitArray[i][1]);
-      }
-
-      xHits.sort();
-      yHits.sort();
-
-      if (xHits[xHits.length - 1] - xHits[0] === xHits.length - 1) {
-        // x coords are in sequence, choose another x
-
-        // If the first hit is row 0, choose the last row hit + 1
-        if (xHits[0] === 0) {
-          x = xHits[xHits.length - 1] + 1;
-          // If the last hit is row 9, choose the first row hit - 1
-        } else if (xHits[xHits.length - 1] === 9) {
-          x = xHits[0] - 1;
-        } else if (
-          checkForMiss(missedAttacks, x + 1, y) ||
-          checkForHit(totalHits, x + 1, y)
-        ) {
-          x -= 1;
-        }
-        // y coords must be in sequence, choose another y
-
-        // If the first hit is col 0, choose the last col hit + 1
-      } else if (yHits[0] === 0) {
-        y = yHits[yHits.length - 1] + 1;
-        // If the last hit is col 9, choose the first col hit - 1
-      } else if (yHits[yHits.length - 1] === 9) {
-        y = yHits[0] - 1;
-      } else if (
-        checkForMiss(missedAttacks, y + 1, y) ||
-        checkForHit(totalHits, y + 1, y)
-      ) {
-        y -= 1;
-      }
-    }
-
-    return [x, y];
   }
 
   // Takes a pair of coordinates, determines whether or not the attack hit a ship
@@ -386,6 +352,15 @@ export default function Gameboard() {
     );
   }
 
+  // Return items unique to arr1
+  function get2DArrayDifference(arr1, arr2) {
+    const diff1 = arr1.filter(
+      (row1) =>
+        !arr2.some((row2) => JSON.stringify(row1) === JSON.stringify(row2)),
+    );
+    return diff1;
+  }
+
   // Checks for matching position in given array using given coordinates
   function checkForHit(hitsArray, row, col) {
     for (let i = 0; i < hitsArray.length; i++) {
@@ -429,6 +404,10 @@ export default function Gameboard() {
     }
 
     return [x, y];
+  }
+
+  function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
   }
 
   initializeGameboard();
