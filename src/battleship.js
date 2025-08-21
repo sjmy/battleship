@@ -10,9 +10,6 @@ import {
   msgCPUShipSunk,
   msgHumanShipSunk,
   msgAttack,
-  msgClear,
-  msgCPUTurn,
-  msgHumanTurn,
 } from "./render.js";
 import {
   randomShipsListener,

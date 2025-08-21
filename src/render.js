@@ -190,11 +190,11 @@ function gameOver(win) {
   gameOverDiv.style.display = "flex";
 
   if (win) {
-    console.log("You win!");
+    gameOverDiv.classList.remove("loss");
     gameOverDiv.classList.add("win");
     gameOverText.textContent = "You win!";
   } else {
-    console.log("CPU wins!");
+    gameOverDiv.classList.remove("win");
     gameOverDiv.classList.add("loss");
     gameOverText.textContent = "CPU wins!";
   }

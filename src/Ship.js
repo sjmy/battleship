@@ -287,9 +287,7 @@ export default function Ship(shipLength) {
           ]);
         }
       }
-      // console.log(legalChoices.get(key));
     }
-    // console.table(legalChoices);
   }
 
   // Increases the number of ‘hits’ on the ship, adds hit to hitsArray
