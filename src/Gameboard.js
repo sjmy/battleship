@@ -158,11 +158,11 @@ export default function Gameboard() {
   }
 
   // Returns random coordinates after delay
-  // TODO: if hit try adjacent squares until ship is sunk
   function cpuTurn(missedAttacks, humanShips, humanPrimaryBoard) {
     let [x, y] = getRandomCoordinates();
     let totalHits = [];
 
+    // Populate totalHits with hits from every human ship
     for (let i = 0; i < humanShips.length; i++) {
       const hitsArray = humanShips[i].getHitsArray();
       for (let j = 0; j < hitsArray.length; j++) {

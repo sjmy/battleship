@@ -16,7 +16,7 @@ TODO:
     - sort out the game messages DONE
       - spacing is currently not correct DONE
     - need to outline ships for clarity DONE
-    - pictures of ships under each player, show hits/sunk
+    - pictures of ships under each player, show hits/sunk DONE
     - abcdefgh 12345 DONE
   - disable ability to click on square that is already a hit DONE
     - currently a CPU ship can be sunk by clicking on a hit square until it sinks

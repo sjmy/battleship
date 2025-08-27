@@ -178,6 +178,74 @@ function renderSecondaryBoard(player, opponent) {
   }
 }
 
+function renderPrimaryShipIcons(human) {
+  const primaryShipIcons = document.querySelector(".primaryShipIcons");
+  const primaryShips = human.gameboard.getShips();
+  primaryShipIcons.textContent = "";
+
+  for (let i = 0; i < primaryShips.length; i++) {
+    const currentShip = primaryShips[i];
+    const emptySquare = document.createElement("button");
+    emptySquare.classList.add("emptyIcon");
+    emptySquare.disabled = "true";
+
+    // For every ship square, create a button
+    for (let j = 0; j < currentShip.getLength(); j++) {
+      const square = document.createElement("button");
+      square.classList.add("shipIcon");
+      square.disabled = "true";
+
+      // Add hits
+      if (j < currentShip.getHits()) {
+        square.classList.remove("shipIcon");
+        square.classList.add("shipIconHit");
+      }
+
+      primaryShipIcons.appendChild(square);
+    }
+
+    // Add an empty square after every ship, except for the last one
+    if (i === primaryShips.length - 1) {
+      continue;
+    }
+    primaryShipIcons.appendChild(emptySquare);
+  }
+}
+
+function renderSecondaryShipIcons(cpu) {
+  const secondaryShipIcons = document.querySelector(".secondaryShipIcons");
+  const secondaryShips = cpu.gameboard.getShips();
+  secondaryShipIcons.textContent = "";
+
+  for (let i = 0; i < secondaryShips.length; i++) {
+    const currentShip = secondaryShips[i];
+    const emptySquare = document.createElement("button");
+    emptySquare.classList.add("emptyIcon");
+    emptySquare.disabled = "true";
+
+    // For every ship square, create a button
+    for (let j = 0; j < currentShip.getLength(); j++) {
+      const square = document.createElement("button");
+      square.classList.add("shipIcon");
+      square.disabled = "true";
+
+      // Add hits only if the ship is sunk so the user doesn't know what ship they've hit
+      if (currentShip.isSunk()) {
+        square.classList.remove("shipIcon");
+        square.classList.add("shipIconHit");
+      }
+
+      secondaryShipIcons.appendChild(square);
+    }
+
+    // Add an empty square after every ship, except for the last one
+    if (i === secondaryShips.length - 1) {
+      continue;
+    }
+    secondaryShipIcons.appendChild(emptySquare);
+  }
+}
+
 function gameOver(win) {
   const primaryBoard = document.querySelector(".primary-board");
   const secondaryBoard = document.querySelector(".secondary-board");
@@ -205,12 +273,16 @@ function gameOver(win) {
 function reset() {
   const primaryBoard = document.querySelector(".primary-board");
   const secondaryBoard = document.querySelector(".secondary-board");
+  const primaryShipIcons = document.querySelector(".primaryShipIcons");
+  const secondaryShipIcons = document.querySelector(".secondaryShipIcons");
   const randomShipsButton = document.querySelector(".randomShipsButton");
   const startGameButton = document.querySelector(".startGameButton");
   const gameOverDiv = document.querySelector(".gameOver");
 
   primaryBoard.classList.remove("fade");
   secondaryBoard.classList.remove("fade");
+  primaryShipIcons.textContent = "";
+  secondaryShipIcons.textContent = "";
   randomShipsButton.style.display = "inline-block";
   startGameButton.style.display = "inline-block";
   gameOverDiv.style.display = "none";
@@ -271,6 +343,8 @@ function msgHumanTurn() {
 export {
   renderPrimaryBoard,
   renderSecondaryBoard,
+  renderPrimaryShipIcons,
+  renderSecondaryShipIcons,
   reset,
   disableButtons,
   gameOver,

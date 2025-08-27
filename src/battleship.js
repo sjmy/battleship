@@ -3,6 +3,8 @@ import Player from "./Player.js";
 import {
   renderPrimaryBoard,
   renderSecondaryBoard,
+  renderPrimaryShipIcons,
+  renderSecondaryShipIcons,
   reset,
   disableButtons,
   gameOver,
@@ -19,12 +21,12 @@ import {
 } from "./listeners.js";
 
 // Handles all functionality before the start game button is clicked
-async function preGame(human, opponent) {
+async function preGame(human, cpu) {
   human.gameboard.randomShipPlacement();
-  opponent.gameboard.randomShipPlacement();
+  cpu.gameboard.randomShipPlacement();
 
   renderPrimaryBoard(human);
-  renderSecondaryBoard(human, opponent);
+  renderSecondaryBoard(human, cpu);
   randomShipsListener(human);
   msgPlaceShips();
 
@@ -43,6 +45,8 @@ async function game() {
   await preGame(human, cpu);
   msgAttack();
   disableButtons();
+  renderPrimaryShipIcons(human);
+  renderSecondaryShipIcons(cpu);
 
   // Game loop until a player's ships are sunk
   while (!human.gameboard.allShipsSunk() && !cpu.gameboard.allShipsSunk()) {
@@ -60,6 +64,7 @@ async function game() {
 
     // Render the boards
     renderSecondaryBoard(human, cpu);
+    renderSecondaryShipIcons(cpu);
 
     // Check for allShipsSunk so CPU doesn't get an extra turn if it's over
     if (cpu.gameboard.allShipsSunk()) {
@@ -93,6 +98,7 @@ async function game() {
 
     // Render the boards
     renderPrimaryBoard(human);
+    renderPrimaryShipIcons(human);
   }
 
   postGame(win);

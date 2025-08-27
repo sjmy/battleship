@@ -1,12 +1,5 @@
 import { renderPrimaryBoard } from "./render.js";
 
-let mouseMoving = false;
-
-document.addEventListener("mousemove", () => {
-  mouseMoving = true;
-  console.log("mouse moving");
-});
-
 function randomShipsListener(player) {
   const randomButton = document.querySelector(".randomShipsButton");
 
