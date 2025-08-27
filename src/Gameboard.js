@@ -1,9 +1,5 @@
 import Ship from "./Ship.js";
 
-// be able to place ships at specific coordinates by calling the ship factory or class
-// keep track of missed attacks so they can display them properly
-// be able to report whether or not all of their ships have been sunk
-
 export default function Gameboard() {
   const rows = 10;
   const cols = 10;
@@ -59,7 +55,7 @@ export default function Gameboard() {
     currentShipHitArray = [];
   }
 
-  // Populate pimaryBoard and secondaryBoard with null values
+  // Populate primaryBoard and secondaryBoard with null values
   function buildBoards() {
     for (let i = 0; i < rows; i++) {
       primaryBoard[i] = [];
@@ -379,31 +375,6 @@ export default function Gameboard() {
       }
     }
     return false;
-  }
-
-  function getCloseCoordinates(x, y) {
-    let origX = x;
-    let origY = y;
-
-    if (getRandomBoolean()) {
-      if (getRandomBoolean()) {
-        x += 1;
-      } else {
-        x -= 1;
-      }
-    } else {
-      if (getRandomBoolean()) {
-        y += 1;
-      } else {
-        y -= 1;
-      }
-    }
-
-    if (x < 0 || x > 9 || y < 0 || y > 9) {
-      getCloseCoordinates(origX, origY);
-    }
-
-    return [x, y];
   }
 
   function getRandomInt(max) {
